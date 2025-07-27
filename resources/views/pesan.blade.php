@@ -80,18 +80,24 @@
                     <p class="text-xl font-bold text-[#0F4BA1]">Futsal</p>
                 </div>
             </a>
-            <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-                <img src="{{ asset('images/icon-sepakbola.png') }}" alt="Sepakbola" class="h-24 w-auto pl-2">
-                <p class="text-xl font-bold text-[#0F4BA1]">Sepakbola</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-                <img src="{{ asset('images/icon-basket.png') }}" alt="Basket" class="h-24 w-auto pl-2">
-                <p class="text-xl font-bold text-[#0F4BA1]">Basket</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-                <img src="{{ asset('images/icon-badminton.png') }}" alt="Badminton" class="h-24 w-auto pl-2">
-                <p class="text-xl font-bold text-[#0F4BA1]">Badminton</p>
-            </div>
+            <a href="/pesan-lapangan?jenis=2">
+                <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+                    <img src="{{ asset('images/icon-sepakbola.png') }}" alt="Sepakbola" class="h-24 w-auto pl-2">
+                    <p class="text-xl font-bold text-[#0F4BA1]">Sepakbola</p>
+                </div>
+            </a>
+            <a href="/pesan-lapangan?jenis=3">
+                <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+                    <img src="{{ asset('images/icon-basket.png') }}" alt="Basket" class="h-24 w-auto pl-2">
+                    <p class="text-xl font-bold text-[#0F4BA1]">Basket</p>
+                </div>
+            </a>
+            <a href="/pesan-lapangan?jenis=4">
+                <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+                    <img src="{{ asset('images/icon-badminton.png') }}" alt="Badminton" class="h-24 w-auto pl-2">
+                    <p class="text-xl font-bold text-[#0F4BA1]">Badminton</p>
+                </div>
+            </a>
         </div>
     </main>
 </body>

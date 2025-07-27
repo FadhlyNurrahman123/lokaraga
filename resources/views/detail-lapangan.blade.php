@@ -130,24 +130,39 @@
         function setupTanggalAndJam() {
             const tanggalInput = document.getElementById("tanggal");
             const jamSelect = document.getElementById("jam");
+            const pesanBtn = document.getElementById("pesanBtn");
 
             const filtered = jadwalData.filter(j => j.lapangan_id === currentNamaLapangan);
             const jamOptions = filtered.map(j => `${formatTime(j.jam_mulai)} - ${formatTime(j.jam_selesai)}`);
             const uniqueJam = [...new Set(jamOptions)];
 
-            // Tampilkan semua jam yang tersedia
             jamSelect.innerHTML = "";
-
             if (uniqueJam.length === 0) {
                 jamSelect.innerHTML = `<option>Tidak ada jadwal tersedia</option>`;
             } else {
-                jamSelect.innerHTML = uniqueJam.map(jam => `<option>${jam}</option>`).join("");
+                jamSelect.innerHTML = [`<option value="">-- Pilih jadwal --</option>`, ...uniqueJam.map(j => `<option>${j}</option>`)].join("");
             }
 
-            // Optional: validasi tanggal 
             const today = new Date().toISOString().split("T")[0];
             tanggalInput.min = today;
+
+            // Aktifkan tombol hanya jika tanggal & jam dipilih
+            function validateForm() {
+                if (tanggalInput.value && jamSelect.value) {
+                    pesanBtn.disabled = false;
+                    pesanBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
+                    pesanBtn.classList.add("bg-[#0F4BA1]", "hover:bg-blue-800", "transition");
+                } else {
+                    pesanBtn.disabled = true;
+                    pesanBtn.classList.add("bg-gray-400", "cursor-not-allowed");
+                    pesanBtn.classList.remove("bg-[#0F4BA1]", "hover:bg-blue-800", "transition");
+                }
+            }
+
+            tanggalInput.addEventListener("change", validateForm);
+            jamSelect.addEventListener("change", validateForm);
         }
+
 
         function renderDetail(data) {
             const container = document.getElementById("detail-container");
@@ -183,18 +198,18 @@
               </select>
               <div class="pointer-events-none absolute right-3 top-10 transform -translate-y-1/2 text-gray-400 text-sm">&#x2304;</div>
             </div>
-            <a href="/konfirm-pesan-lapangan">
-              <button class="w-full bg-[#0F4BA1] text-white py-2 rounded-2xl font-medium hover:bg-blue-800 transition mt-3">
-                Pesan
-              </button>
-            </a>
+            <button id="pesanBtn" disabled class="w-full bg-gray-400 text-white py-2 rounded-2xl font-medium mt-3 cursor-not-allowed">
+            Pesan
+            </button>
           </div>
         </div>
 
         <div class="flex-1 space-y-5">
           <div class="bg-white shadow-md p-4 rounded-xl flex justify-between items-center">
             <h3 class="text-2xl font-semibold">${data.nm_lapangan}</h3>
-            <button class="bg-[#0F4BA1] text-white font-medium px-4 py-2 rounded-full text-sm">Gabung Membership</button>
+            <a href="/membership" class="bg-[#0F4BA1] text-white font-medium px-4 py-2 rounded-full text-sm inline-block">
+            Gabung Membership
+            </a>
           </div>
 
           <div class="bg-white shadow-md p-4 rounded-xl">
@@ -210,6 +225,30 @@
         </div>
       </div>
     `;
+            document.getElementById("pesanBtn")?.addEventListener("click", () => {
+                const tanggal = document.getElementById("tanggal").value;
+                const jam = document.getElementById("jam").value;
+
+                if (!tanggal || !jam) return;
+
+                // cari jadwal_id berdasarkan jam
+                const jadwalCocok = jadwalData.find(j => {
+                    const jamFormat = `${formatTime(j.jam_mulai)} - ${formatTime(j.jam_selesai)}`;
+                    return jamFormat === jam;
+                });
+
+                if (!jadwalCocok) {
+                    alert("Jadwal tidak valid.");
+                    return;
+                }
+
+                localStorage.setItem("tanggal", tanggal);
+                localStorage.setItem("jam", jam);
+                localStorage.setItem("jadwal_id", jadwalCocok.id);
+                localStorage.setItem("lapangan_id", getIdFromURL());
+
+                window.location.href = `/konfirm-pesan-lapangan?tanggal=${tanggal}&jam=${encodeURIComponent(jam)}`;
+            });
         }
 
         let currentSlide = 0;
@@ -233,7 +272,20 @@
             updateSlide();
         }
 
-        document.addEventListener("DOMContentLoaded", fetchLapanganDetail);
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchLapanganDetail();
+
+            const pesanBtn = document.getElementById("pesanBtn");
+            pesanBtn?.addEventListener("click", () => {
+                const tanggal = document.getElementById("tanggal").value;
+                const jam = document.getElementById("jam").value;
+
+                if (tanggal && jam) {
+                    // Redirect ke halaman konfirmasi dengan query string (opsional)
+                    window.location.href = `/konfirm-pesan-lapangan?tanggal=${tanggal}&jam=${encodeURIComponent(jam)}`;
+                }
+            });
+        });
     </script>
 </body>
 

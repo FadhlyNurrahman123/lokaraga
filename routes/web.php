@@ -38,8 +38,20 @@ Route::get('/riwayat', function () {
     return view('riwayat');
 });
 
-Route::get('/detail-riwayat', function () {
-    return view('detail-riwayat');
+Route::get('/detail-riwayat/{id}', function ($id) {
+    return view('detail-riwayat', ['id' => $id]);
+});
+
+Route::get('/membership', function () {
+    return view('membership');
+});
+
+Route::get('/pilihan-membership', function () {
+    return view('pilihan-membership');
+});
+
+Route::get('/konfirm-membership', function () {
+    return view('konfirm-membership');
 });
 
 Route::get('/akun', function () {
