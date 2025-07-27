@@ -67,22 +67,30 @@
         <div class="mt-5 mb-8">
             <h2 class="text-lg mb-4">Pilih Olahraga</h2>
             <div class="grid grid-cols-4 gap-6">
-                <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
-                    <img src="/images/icon-futsal.png" class="h-12 mx-auto mb-2">
-                    <p>Futsal</p>
-                </div>
-                <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
-                    <img src="/images/icon-sepakbola.png" class="h-12 mx-auto mb-2">
-                    <p>Sepakbola</p>
-                </div>
-                <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
-                    <img src="/images/icon-badminton.png" class="h-12 mx-auto mb-2">
-                    <p>Badminton</p>
-                </div>
-                <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
-                    <img src="/images/icon-basket.png" class="h-12 mx-auto mb-2">
-                    <p>Basket</p>
-                </div>
+                <a href="/pesan-lapangan?jenis=1">
+                    <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
+                        <img src="/images/icon-futsal.png" class="h-12 mx-auto mb-2">
+                        <p>Futsal</p>
+                    </div>
+                </a>
+                <a href="/pesan-lapangan?jenis=2">
+                    <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
+                        <img src="/images/icon-sepakbola.png" class="h-12 mx-auto mb-2">
+                        <p>Sepakbola</p>
+                    </div>
+                </a>
+                <a href="/pesan-lapangan?jenis=3">
+                    <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
+                        <img src="/images/icon-badminton.png" class="h-12 mx-auto mb-2">
+                        <p>Badminton</p>
+                    </div>
+                </a>
+                <a href="/pesan-lapangan?jenis=4">
+                    <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
+                        <img src="/images/icon-basket.png" class="h-12 mx-auto mb-2">
+                        <p>Basket</p>
+                    </div>
+                </a>
             </div>
         </div>
         <div class="mb-8">
