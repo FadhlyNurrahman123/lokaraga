@@ -57,3 +57,11 @@ Route::get('/konfirm-membership', function () {
 Route::get('/akun', function () {
     return view('akun');
 });
+
+Route::get('/beranda-pemilik', function () {
+    return view('beranda-pemilik');
+});
+
+Route::get('/beranda-admin', function () {
+    return view('beranda-admin');
+});

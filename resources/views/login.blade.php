@@ -55,7 +55,6 @@
       <a href="/register" class="text-blue-700 font-semibold hover:underline">Buat akun</a>
     </p>
   </div>
-
   <script>
     const form = document.getElementById('loginForm');
 
@@ -71,6 +70,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
+          redirect: 'manual', // cegah auto-follow redirect
           body: JSON.stringify({
             email: email,
             kata_sandi: password
@@ -78,20 +78,46 @@
         });
 
         if (response.ok) {
-          const token = await response.text();
-          localStorage.setItem('token', token);
-          alert('Login berhasil!');
-          window.location.href = '/beranda';
+          const token = await response.text(); // hasil dari BE adalah plain text
+          localStorage.setItem("token", token);
+
+          // Ambil data user dari /profile
+          const profileRes = await fetch(`${API_BASE_URL}/profile`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+
+          if (profileRes.ok) {
+            const user = await profileRes.json();
+            const role_id = user.role_id;
+            localStorage.setItem("role_id", role_id);
+            localStorage.setItem("user_name", user.nama);
+
+            alert("Login berhasil!");
+
+            if (role_id == 1) {
+              window.location.href = "/beranda-pemilik";
+            } else if (role_id == 2) {
+              window.location.href = "/beranda-admin";
+            } else {
+              window.location.href = "/beranda";
+            }
+          } else {
+            alert("Gagal mengambil data user.");
+          }
         } else {
           const error = await response.text();
-          alert('Login gagal. ' + error);
+          alert("Login gagal: " + error);
         }
       } catch (error) {
-        alert('Terjadi kesalahan jaringan. Coba lagi nanti.');
+        alert("Terjadi kesalahan jaringan. Coba lagi nanti.");
         console.error(error);
       }
     });
   </script>
+
 </body>
 
 </html>
