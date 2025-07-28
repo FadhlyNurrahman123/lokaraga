@@ -77,7 +77,7 @@
     </main>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            fetch("http://127.0.0.1:8002/api/jenismember")
+            fetch(`${API_BASE_URL}/jenismember`)
                 .then(response => response.json())
                 .then(result => {
                     const list = document.getElementById("membershipList");

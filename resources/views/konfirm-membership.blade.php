@@ -108,71 +108,90 @@
       <p class="text-center">Berhasil</p>
     </div>
   </main>
-
   <script>
-    function getQueryParams() {
-      const params = new URLSearchParams(window.location.search);
-      return {
-        id: params.get("id"),
-      };
+  function getQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      id: params.get("id"),
+    };
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const { id } = getQueryParams();
+    const token = localStorage.getItem("token");
+
+    console.log("Membership ID dari URL:", id);
+    console.log("Token dari localStorage:", token);
+
+    if (!id || !token) {
+      alert("ID membership atau token tidak ditemukan");
+      return;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const { id } = getQueryParams();
-      const token = localStorage.getItem("token");
+    fetch(`${API_BASE_URL}/jenismember/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        const data = result.data;
+        console.log("Data membership:", data);
 
-      if (!id) {
-        alert("ID membership tidak ditemukan");
-        return;
-      }
+        document.getElementById("lapangan").textContent = data.nm_membership || "-";
+        document.getElementById("harga").textContent = data.harga || "-";
+        document.getElementById("tanggal").textContent = data.masa_berlaku || "-";
+        document.getElementById("jam").textContent = "1x / minggu";
+        document.getElementById("total").textContent = data.harga || "-";
 
-      fetch(`${API_BASE_URL}/jenismember/${id}`)
-        .then(response => response.json())
-        .then(result => {
-          const data = result.data;
+        const today = new Date();
+        const tgl_mulai = today.toISOString().split("T")[0];
+        const tgl_selesai = new Date(today);
+        tgl_selesai.setFullYear(today.getFullYear() + 1);
+        const tgl_selesai_str = tgl_selesai.toISOString().split("T")[0];
 
-          document.getElementById("lapangan").textContent = data.nm_membership || "-";
-          document.getElementById("harga").textContent = data.harga || "-";
-          document.getElementById("tanggal").textContent = data.masa_berlaku || "-";
-          document.getElementById("jam").textContent = "1x / minggu";
-          document.getElementById("total").textContent = data.harga || "-";
+        console.log("Tanggal Mulai:", tgl_mulai);
+        console.log("Tanggal Selesai:", tgl_selesai_str);
 
-          document.getElementById("pesanBtn").addEventListener("click", async () => {
-            try {
-              const response = await fetch(`${API_BASE_URL}/Createmember`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                  id_membership: parseInt(id),
-                }),
-              });
+        document.getElementById("pesanBtn").addEventListener("click", async () => {
+          try {
+            const response = await fetch(`${API_BASE_URL}/Createmember`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                tgl_mulai: tgl_mulai,
+                tgl_selesai: tgl_selesai_str,
+                jenismember_id: parseInt(id),
+              }),
+            });
 
-              const result = await response.json();
+            const result = await response.json();
 
-              if (response.ok) {
-                document.getElementById("popupBerhasil").classList.remove("hidden");
-                setTimeout(() => {
-                  document.getElementById("popupBerhasil").classList.add("hidden");
-                  window.location.href = "/riwayat";
-                }, 2000);
-              } else {
-                alert("Gagal memesan membership: " + (result.message || "Terjadi kesalahan."));
-              }
-            } catch (error) {
-              console.error("Error:", error);
-              alert("Terjadi kesalahan saat memesan membership.");
+            if (response.ok) {
+              document.getElementById("popupBerhasil").classList.remove("hidden");
+              setTimeout(() => {
+                document.getElementById("popupBerhasil").classList.add("hidden");
+              }, 2000);
+            } else {
+              alert("Gagal memesan membership: " + (result.message || "Terjadi kesalahan."));
             }
-          });
-        })
-        .catch(error => {
-          console.error("Gagal memuat detail membership:", error);
-          alert("Gagal memuat data membership.");
+          } catch (error) {
+            console.error("Error saat fetch Createmember:", error);
+            alert("Terjadi kesalahan saat memesan membership.");
+          }
         });
-    });
-  </script>
+      })
+      .catch((error) => {
+        console.error("Gagal memuat detail membership:", error);
+        alert("Gagal memuat data membership.");
+      });
+  });
+</script>
+
+
 </body>
 
 </html>
