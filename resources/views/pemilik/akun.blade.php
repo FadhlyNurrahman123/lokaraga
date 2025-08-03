@@ -32,36 +32,40 @@
             <hr class="mt-5 border-t-2 border-white opacity-100">
         </div>
         <nav class="space-y-4">
-            <a href="/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/pemilik/beranda" class="flex items-center space-x-3 rounded-lg px-4 py-2">
                 <img src="/images/beranda-white.png" class="h-5" alt="Home">
                 <span>Beranda</span>
             </a>
-            <a href="/pesan" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
-                <img src="/images/pesan-white.png" class="h-5" alt="Pesan">
-                <span>Pesan</span>
+            <a href="/pemilik/kelola" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+                <img src="/images/pesan-white.png" class="h-5" alt="Kelola">
+                <span>Kelola</span>
             </a>
-            <a href="/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
-                <img src="{{ asset('images/riwayat-white.png') }}" class="h-5" alt="Riwayat">
+            <a href="/pemilik/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+                <img src="/images/riwayat-white.png" class="h-5" alt="Riwayat">
                 <span>Riwayat</span>
             </a>
-            <a href="/akun" class="flex items-center space-x-3 text-black bg-[#CCDBED] px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition font-semibold">
-                <img src="{{ asset('images/akun-black.png') }}" class="h-5" alt="Akun">
+            <a href="/pemilik/membership" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+                <img src="/images/membership-white.png" class="h-5" alt="Membership">
+                <span>Membership</span>
+            </a>
+            <a href="/pemilik/akun" class="flex items-center space-x-3 px-4 py-2 bg-[#CCDBED] text-black rounded-lg transition font-semibold">
+                <img src="/images/akun-black.png" class="h-5" alt="Akun">
                 <span>Akun</span>
             </a>
         </nav>
     </aside>
 
     <main class="flex-1 p-8">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-xl">Profile</h1>
+        <div class="flex justify-between items-center mb-5">
+            <div class="flex items-center space-x-2">
+                <h1 class="text-xl">Profile</h1>
+            </div>
             <div class="flex items-center gap-3">
                 <div class="relative w-60">
-                    <input type="text" placeholder="Search..."
-                        class="w-full py-2 pl-4 pr-10 text-black placeholder-black text-sm border border-black rounded-md focus:outline-none" />
-                    <img src="/images/icon-search.png" alt="Search"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5" />
+                    <input type="text" placeholder="Search..." class="w-full py-2 pl-4 pr-10 text-black placeholder-black placeholder:text-sm border border-black rounded-md focus:outline-none">
+                    <img src="/images/icon-search.png" alt="Search" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5">
                 </div>
-                <a href="/akun">
+                <a href="/pemilik/akun">
                     <img src="/images/icon-profile.png" class="h-10 cursor-pointer" alt="Profile" />
                 </a>
             </div>
@@ -242,7 +246,7 @@
             </div>
         </div>
     </main>
-    <script>        
+    <script>
         const token = localStorage.getItem("token");
         const API = `${API_BASE_URL}/profile`;
         const namaUser = document.getElementById("namaUser");

@@ -98,11 +98,11 @@
             alert("Login berhasil!");
 
             if (role_id == 1) {
-              window.location.href = "/beranda-pemilik";
+              window.location.href = "/pemilik/beranda";
             } else if (role_id == 2) {
-              window.location.href = "/beranda-admin";
+              window.location.href = "/admin/daftar-pemilik";
             } else {
-              window.location.href = "/beranda";
+              window.location.href = "/penyewa/beranda";
             }
           } else {
             alert("Gagal mengambil data user.");

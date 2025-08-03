@@ -32,19 +32,19 @@
             <hr class="mt-5 border-t-2 border-white opacity-100">
         </div>
         <nav class="space-y-4">
-            <a href="/beranda" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
+            <a href="/penyewa/beranda" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
                 <img src="/images/beranda-black.png" class="h-5" alt="Home">
                 <span>Beranda</span>
             </a>
-            <a href="/pesan" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/pesan" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="/images/pesan-white.png" class="h-5" alt="Pesan">
                 <span>Pesan</span>
             </a>
-            <a href="/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="{{ asset('images/riwayat-white.png') }}" class="h-5" alt="Riwayat">
                 <span>Riwayat</span>
             </a>
-            <a href="/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="{{ asset('images/akun-white.png') }}" class="h-5" alt="Akun">
                 <span>Akun</span>
             </a>
@@ -58,7 +58,7 @@
                     <input type="text" placeholder="Search..." class="w-full py-2 pl-4 pr-10 text-black placeholder-black text-sm border border-black rounded-md focus:outline-none">
                     <img src="/images/icon-search.png" alt="Search" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5">
                 </div>
-                <a href="/akun">
+                <a href="/penyewa/akun">
                     <img src="/images/icon-profile.png" class="h-10 cursor-pointer" alt="Profile" />
                 </a>
             </div>
@@ -67,25 +67,25 @@
         <div class="mt-5 mb-8">
             <h2 class="text-lg mb-4">Pilih Olahraga</h2>
             <div class="grid grid-cols-4 gap-6">
-                <a href="/pesan-lapangan?jenis=1">
+                <a href="/penyewa/pesan-lapangan?jenis=1">
                     <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
                         <img src="/images/icon-futsal.png" class="h-12 mx-auto mb-2">
                         <p>Futsal</p>
                     </div>
                 </a>
-                <a href="/pesan-lapangan?jenis=2">
+                <a href="/penyewa/pesan-lapangan?jenis=2">
                     <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
                         <img src="/images/icon-sepakbola.png" class="h-12 mx-auto mb-2">
                         <p>Sepakbola</p>
                     </div>
                 </a>
-                <a href="/pesan-lapangan?jenis=3">
+                <a href="/penyewa/pesan-lapangan?jenis=3">
                     <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
                         <img src="/images/icon-badminton.png" class="h-12 mx-auto mb-2">
                         <p>Badminton</p>
                     </div>
                 </a>
-                <a href="/pesan-lapangan?jenis=4">
+                <a href="/penyewa/pesan-lapangan?jenis=4">
                     <div class="bg-white rounded-xl border shadow-lg p-4 text-center hover:shadow-xl cursor-pointer">
                         <img src="/images/icon-basket.png" class="h-12 mx-auto mb-2">
                         <p>Basket</p>

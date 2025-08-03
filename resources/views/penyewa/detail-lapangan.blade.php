@@ -32,19 +32,19 @@
             <hr class="mt-5 border-t-2 border-white opacity-100">
         </div>
         <nav class="space-y-4">
-            <a href="/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="{{ asset('images/beranda-white.png') }}" class="h-5" alt="Home">
                 <span>Beranda</span>
             </a>
-            <a href="/pesan" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
+            <a href="/penyewa/pesan" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
                 <img src="{{ asset('images/pesan-black.png') }}" class="h-5" alt="Pesan">
                 <span>Pesan</span>
             </a>
-            <a href="/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="{{ asset('images/riwayat-white.png') }}" class="h-5" alt="Riwayat">
                 <span>Riwayat</span>
             </a>
-            <a href="/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="{{ asset('images/akun-white.png') }}" class="h-5" alt="Akun">
                 <span>Akun</span>
             </a>
@@ -64,7 +64,7 @@
                     <input type="text" placeholder="Search..." class="w-full py-2 pl-4 pr-10 text-black placeholder-black placeholder:text-sm border border-black rounded-md focus:outline-none">
                     <img src="{{ asset('images/icon-search.png') }}" alt="Search" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5">
                 </div>
-                <a href="/akun">
+                <a href="/penyewa/akun">
                     <img src="/images/icon-profile.png" class="h-10 cursor-pointer" alt="Profile" />
                 </a>
             </div>
@@ -207,7 +207,7 @@
         <div class="flex-1 space-y-5">
           <div class="bg-white shadow-md p-4 rounded-xl flex justify-between items-center">
             <h3 class="text-2xl font-semibold">${data.nm_lapangan}</h3>
-            <a href="/membership" class="bg-[#0F4BA1] text-white font-medium px-4 py-2 rounded-full text-sm inline-block">
+            <a href="/penyewa/membership" class="bg-[#0F4BA1] text-white font-medium px-4 py-2 rounded-full text-sm inline-block">
             Gabung Membership
             </a>
           </div>
@@ -247,7 +247,7 @@
                 localStorage.setItem("jadwal_id", jadwalCocok.id);
                 localStorage.setItem("lapangan_id", getIdFromURL());
 
-                window.location.href = `/konfirm-pesan-lapangan?tanggal=${tanggal}&jam=${encodeURIComponent(jam)}`;
+                window.location.href = `/penyewa/konfirm-pesan-lapangan?tanggal=${tanggal}&jam=${encodeURIComponent(jam)}`;
             });
         }
 
@@ -282,7 +282,7 @@
 
                 if (tanggal && jam) {
                     // Redirect ke halaman konfirmasi dengan query string (opsional)
-                    window.location.href = `/konfirm-pesan-lapangan?tanggal=${tanggal}&jam=${encodeURIComponent(jam)}`;
+                    window.location.href = `/penyewa/konfirm-pesan-lapangan?tanggal=${tanggal}&jam=${encodeURIComponent(jam)}`;
                 }
             });
         });

@@ -31,19 +31,19 @@
             <hr class="mt-5 border-t-2 border-white opacity-100">
         </div>
         <nav class="space-y-4">
-            <a href="/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="{{ asset('images/beranda-white.png') }}" class="h-5" alt="Home">
                 <span>Beranda</span>
             </a>
-            <a href="/pesan" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
+            <a href="/penyewa/pesan" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
                 <img src="{{ asset('images/pesan-black.png') }}" class="h-5" alt="Pesan">
                 <span>Pesan</span>
             </a>
-            <a href="/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="{{ asset('images/riwayat-white.png') }}" class="h-5" alt="Riwayat">
                 <span>Riwayat</span>
             </a>
-            <a href="/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+            <a href="/penyewa/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
                 <img src="{{ asset('images/akun-white.png') }}" class="h-5" alt="Akun">
                 <span>Akun</span>
             </a>
@@ -65,7 +65,7 @@
                         alt="Search"
                         class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5">
                 </div>
-                <a href="/akun">
+                <a href="/penyewa/akun">
                     <img src="/images/icon-profile.png" class="h-10 cursor-pointer" alt="Profile" />
                 </a>
             </div>
@@ -74,25 +74,25 @@
 
         <h2 class="text-lg mb-4">Pilih olahraga yang Anda inginkan ...</h2>
         <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-6">
-            <a href="/pesan-lapangan?jenis=1">
+            <a href="/penyewa/pesan-lapangan?jenis=1">
                 <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
                     <img src="{{ asset('images/icon-futsal.png') }}" alt="Futsal" class="h-24 w-auto pl-2">
                     <p class="text-xl font-bold text-[#0F4BA1]">Futsal</p>
                 </div>
             </a>
-            <a href="/pesan-lapangan?jenis=2">
+            <a href="/penyewa/pesan-lapangan?jenis=2">
                 <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
                     <img src="{{ asset('images/icon-sepakbola.png') }}" alt="Sepakbola" class="h-24 w-auto pl-2">
                     <p class="text-xl font-bold text-[#0F4BA1]">Sepakbola</p>
                 </div>
             </a>
-            <a href="/pesan-lapangan?jenis=3">
+            <a href="/penyewa/pesan-lapangan?jenis=3">
                 <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
                     <img src="{{ asset('images/icon-basket.png') }}" alt="Basket" class="h-24 w-auto pl-2">
                     <p class="text-xl font-bold text-[#0F4BA1]">Basket</p>
                 </div>
             </a>
-            <a href="/pesan-lapangan?jenis=4">
+            <a href="/penyewa/pesan-lapangan?jenis=4">
                 <div class="bg-white rounded-2xl shadow-md px-8 py-8 flex items-center space-x-8 w-full hover:shadow-xl transition-shadow duration-300 cursor-pointer">
                     <img src="{{ asset('images/icon-badminton.png') }}" alt="Badminton" class="h-24 w-auto pl-2">
                     <p class="text-xl font-bold text-[#0F4BA1]">Badminton</p>

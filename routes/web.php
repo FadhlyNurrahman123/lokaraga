@@ -2,66 +2,43 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Publik
+Route::view('/', 'welcome');
+Route::view('/login', 'login');
+Route::view('/register', 'register');
+
+// Penyewa
+Route::prefix('penyewa')->group(function () {
+    Route::view('/beranda', 'penyewa.beranda');
+    Route::view('/pesan', 'penyewa.pesan');
+    Route::view('/pesan-lapangan', 'penyewa.pesan-lapangan');
+    Route::get('/detail-lapangan/{id}', fn($id) => view('penyewa.detail-lapangan', ['id' => $id]));
+    Route::view('/konfirm-pesan-lapangan', 'penyewa.konfirm-pesan-lapangan');
+    Route::view('/riwayat', 'penyewa.riwayat');
+    Route::get('/detail-riwayat/{id}', fn($id) => view('penyewa.detail-riwayat', ['id' => $id]));
+    Route::view('/membership', 'penyewa.membership');
+    Route::view('/pilihan-membership', 'penyewa.pilihan-membership');
+    Route::view('/konfirm-membership', 'penyewa.konfirm-membership');
+    Route::view('/akun', 'penyewa.akun');
 });
 
-Route::get('/login', function () {
-    return view('login');
+// Pemilik
+Route::prefix('pemilik')->group(function () {
+    Route::view('/beranda', 'pemilik.beranda');
+    Route::view('/kelola', 'pemilik.kelola');
+    Route::view('/edit-lapangan', 'pemilik.edit-lapangan');
+    Route::view('/riwayat', 'pemilik.riwayat');
+    Route::get('/detail-riwayat/{id}', fn($id) => view('pemilik.detail-riwayat', ['id' => $id]));
+    Route::view('/membership', 'pemilik.membership');
+    Route::view('/tambah-membership', 'pemilik.tambah-membership');
+    Route::get('/anggota-membership/{id}', fn($id) => view('pemilik.anggota-membership', ['id' => $id]));
+    Route::get('/detail-membership/{id}', fn($id) => view('pemilik.detail-membership', ['id' => $id]));
+    Route::view('/akun', 'pemilik.akun');
 });
 
-Route::get('/register', function () {
-    return view('register');
-});
-
-Route::get('/beranda', function () {
-    return view('beranda');
-});
-
-Route::get('/pesan', function () {
-    return view('pesan');
-});
-
-Route::get('/pesan-lapangan', function () {
-    return view('pesan-lapangan');
-});
-
-Route::get('/detail-lapangan/{id}', function ($id) {
-    return view('detail-lapangan', ['id' => $id]);
-});
-
-Route::get('/konfirm-pesan-lapangan', function () {
-    return view('konfirm-pesan-lapangan');
-});
-
-Route::get('/riwayat', function () {
-    return view('riwayat');
-});
-
-Route::get('/detail-riwayat/{id}', function ($id) {
-    return view('detail-riwayat', ['id' => $id]);
-});
-
-Route::get('/membership', function () {
-    return view('membership');
-});
-
-Route::get('/pilihan-membership', function () {
-    return view('pilihan-membership');
-});
-
-Route::get('/konfirm-membership', function () {
-    return view('konfirm-membership');
-});
-
-Route::get('/akun', function () {
-    return view('akun');
-});
-
-Route::get('/beranda-pemilik', function () {
-    return view('beranda-pemilik');
-});
-
-Route::get('/beranda-admin', function () {
-    return view('beranda-admin');
+// Admin
+Route::prefix('admin')->group(function () {
+    Route::view('daftar-pemilik', 'admin.daftar-pemilik');
+    Route::view('daftar-penyewa', 'admin.daftar-penyewa');
+    Route::view('akun', 'admin.akun');
 });

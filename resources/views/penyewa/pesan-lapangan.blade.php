@@ -32,19 +32,19 @@
       <hr class="mt-5 border-t-2 border-white opacity-100">
     </div>
     <nav class="space-y-4">
-      <a href="/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+      <a href="/penyewa/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
         <img src="/images/beranda-white.png" class="h-5" alt="Home">
         <span>Beranda</span>
       </a>
-      <a href="/pesan" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
+      <a href="/penyewa/pesan" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
         <img src="/images/pesan-black.png" class="h-5" alt="Pesan">
         <span>Pesan</span>
       </a>
-      <a href="/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+      <a href="/penyewa/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
         <img src="/images/riwayat-white.png" class="h-5" alt="Riwayat">
         <span>Riwayat</span>
       </a>
-      <a href="/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+      <a href="/penyewa/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
         <img src="/images/akun-white.png" class="h-5" alt="Akun">
         <span>Akun</span>
       </a>
@@ -64,7 +64,7 @@
           <input type="text" placeholder="Search..." class="w-full py-2 pl-4 pr-10 text-black placeholder-black placeholder:text-sm border border-black rounded-md focus:outline-none">
           <img src="/images/icon-search.png" alt="Search" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5">
         </div>
-        <a href="/akun">
+        <a href="/penyewa/akun">
           <img src="/images/icon-profile.png" class="h-10 cursor-pointer" alt="Profile" />
         </a>
       </div>
@@ -144,7 +144,7 @@
               <h3 class="text-xl font-bold text-center mt-3">${lapangan.nm_lapangan}</h3>
               <p class="text-xs text-gray-600 text-center">${lapangan.alamat}</p>
               <p class="text-md text-center">${lapangan.harga} / jam</p>
-              <a href="/detail-lapangan/${lapangan.id}" class="inline-block w-full bg-[#0F4BA1] text-white text-center mt-5 py-2 rounded-md hover:bg-blue-800 transition">Detail Lapangan</a>
+              <a href="/penyewa/detail-lapangan/${lapangan.id}" class="inline-block w-full bg-[#0F4BA1] text-white text-center mt-5 py-2 rounded-md hover:bg-blue-800 transition">Detail Lapangan</a>
             </div>
           </div>
         `;

@@ -32,19 +32,19 @@
       <hr class="mt-5 border-t-2 border-white opacity-100">
     </div>
     <nav class="space-y-4">
-      <a href="/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+      <a href="/penyewa/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
         <img src="/images/beranda-white.png" class="h-5" alt="Home">
         <span>Beranda</span>
       </a>
-      <a href="/pesan" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
+      <a href="/penyewa/pesan" class="flex items-center space-x-3 bg-[#CCDBED] text-black rounded-lg px-4 py-2 font-semibold">
         <img src="/images/pesan-black.png" class="h-5" alt="Pesan">
         <span>Pesan</span>
       </a>
-      <a href="/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+      <a href="/penyewa/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
         <img src="/images/riwayat-white.png" class="h-5" alt="Riwayat">
         <span>Riwayat</span>
       </a>
-      <a href="/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
+      <a href="/penyewa/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
         <img src="/images/akun-white.png" class="h-5" alt="Akun">
         <span>Akun</span>
       </a>
