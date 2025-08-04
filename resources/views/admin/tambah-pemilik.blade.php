@@ -68,7 +68,7 @@
         </div>
 
         <hr class="border-t-2 border-black opacity-20 mb-6">
-        <form id="registerForm" class="max-w-md space-y-7">
+        <form id="pemilikForm" class="max-w-md space-y-7">
             <div>
                 <label class="block text-md mb-1">Nama Pemilik</label>
                 <input id="nama" type="text" placeholder="Masukkan nama pemilik" class="w-full border rounded-md px-4 py-2 text-sm text-black bg-[#F2F8FF] border-[#CCE0F7] focus:outline-none">
@@ -93,7 +93,7 @@
         </form>
 
         <script>
-            document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            document.getElementById('pemilikForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
 
                 const data = {

@@ -76,38 +76,64 @@
         <div id="membershipList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
     </main>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch(`${API_BASE_URL}/jenismember`)
-                .then(response => response.json())
-                .then(result => {
-                    const list = document.getElementById("membershipList");
-                    const data = result.data;
+        document.addEventListener("DOMContentLoaded", async function() {
+            const token = localStorage.getItem("token");
+            const userId = parseInt(localStorage.getItem("user_id"));
+            const urlParams = new URLSearchParams(window.location.search);
+            const lapanganId = urlParams.get("lapangan_id");
 
-                    if (!data || data.length === 0) {
-                        list.innerHTML = '<p class="text-gray-600">Belum ada data membership.</p>';
-                        return;
+            try {
+                // Ambil data lapangan tertentu
+                const lapanganRes = await fetch(`${API_BASE_URL}/lapangan`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
                     }
-
-                    data.forEach(item => {
-                        const card = document.createElement("a");
-                        const lapangan_id = localStorage.getItem("lapangan_id");
-                        card.href = `/penyewa/konfirm-membership?id=${item.id}&lapangan_id=${lapangan_id}`;
-                        card.innerHTML = `
-                    <div class="flex justify-between items-center bg-[#F4FAFF] border border-[#C4DAEE] px-6 py-4 rounded-xl shadow-sm hover:shadow-md transition">
-                        <div>
-                            <p class="font-semibold">${item.nm_membership}</p>
-                            <p class="text-sm text-gray-700 mt-2">${item.masa_berlaku}</p>
-                        </div>
-                        <p class="font-semibold">Rp ${Number(item.harga).toLocaleString("id-ID")}</p>
-                    </div>
-                `;
-                        list.appendChild(card);
-                    });
-                })
-                .catch(error => {
-                    console.error("Gagal memuat data:", error);
-                    document.getElementById("membershipList").innerHTML = `<p class="text-red-500">Gagal memuat data.</p>`;
                 });
+                const lapanganData = await lapanganRes.json();
+                const lapangan = lapanganData.data.find(l => l.id == lapanganId);
+
+                if (!lapangan) {
+                    document.getElementById("membershipList").innerHTML = `<p class="text-red-500">Lapangan tidak ditemukan.</p>`;
+                    return;
+                }
+
+                const pemilikNama = lapangan.user_nama; // dari response lapangan
+
+                // Ambil data membership
+                const memberRes = await fetch(`${API_BASE_URL}/jenismember`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                const memberData = await memberRes.json();
+
+                const list = document.getElementById("membershipList");
+                const filtered = memberData.data.filter(m => m.user_id === pemilikNama);
+
+                if (filtered.length === 0) {
+                    list.innerHTML = '<p class="text-gray-600">Belum ada membership untuk lapangan ini.</p>';
+                    return;
+                }
+
+                filtered.forEach(item => {
+                    const card = document.createElement("a");
+                    card.href = `/penyewa/konfirm-membership?id=${item.id}&lapangan_id=${lapanganId}`;
+                    card.innerHTML = `
+                <div class="flex justify-between items-center bg-[#F4FAFF] border border-[#C4DAEE] px-6 py-4 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div>
+                        <p class="font-semibold">${item.nm_membership}</p>
+                        <p class="text-sm text-gray-700 mt-2">${item.masa_berlaku}</p>
+                    </div>
+                    <p class="font-semibold">Rp ${Number(item.harga).toLocaleString("id-ID")}</p>
+                </div>
+            `;
+                    list.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Gagal memuat data:", error);
+                document.getElementById("membershipList").innerHTML = `<p class="text-red-500">Gagal memuat data.</p>`;
+            }
         });
     </script>
 </body>
