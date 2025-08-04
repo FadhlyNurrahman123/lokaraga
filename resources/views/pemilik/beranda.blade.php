@@ -137,6 +137,10 @@
 
     async function loadPesanan() {
       try {
+        const token = localStorage.getItem("token");
+        const userId = parseInt(localStorage.getItem("user_id"));
+        const pesananContainer = document.getElementById("pesananContainer");
+
         const [lapanganRes, pesananRes] = await Promise.all([
           fetch(`${API_BASE_URL}/lapangan`, {
             headers: {
@@ -152,8 +156,8 @@
 
         const lapanganData = await lapanganRes.json();
         const myLapangans = lapanganData.data.filter(l => l.user_id == userId);
-        const myLapanganIds = myLapangans.map(l => l.id);
         const myLapanganNames = myLapangans.map(l => l.nm_lapangan);
+
         const pesananData = await pesananRes.json();
         const filteredPesanan = pesananData.data.filter(p =>
           myLapanganNames.includes(p.lapangan_id)
@@ -170,10 +174,14 @@
           filteredPesanan.forEach(item => {
             const card = document.createElement("div");
             card.className = "bg-white rounded-2xl p-4 shadow-md";
+
+            const hargaNumber = parseInt(item.total_harga.toString().replace(/[^\d]/g, ""));
+            const hargaFormatted = hargaNumber ? `Rp ${hargaNumber.toLocaleString('id-ID')}` : "-";
+
             card.innerHTML = `
           <div class="flex justify-between items-center mb-2">
             <p class="font-semibold text-md">ID transaksi: INV-${item.id}-FT</p>
-            <span class="text-[#1BE387] font-bold text-xl">${item.total_harga}</span>
+            <span class="text-[#1BE387] font-bold text-xl">${hargaFormatted}</span>
           </div>
           <div class="flex justify-between items-start">
             <div class="space-y-1">
@@ -282,6 +290,10 @@
 
     async function loadPendapatan() {
       try {
+        const token = localStorage.getItem("token");
+        const userId = parseInt(localStorage.getItem("user_id"));
+        const userName = localStorage.getItem("user_name");
+
         // Ambil data lapangan milik user
         const lapanganRes = await fetch(`${API_BASE_URL}/lapangan`, {
           headers: {
@@ -290,6 +302,7 @@
         });
         const lapanganData = await lapanganRes.json();
         const myLapangans = lapanganData.data.filter(l => l.user_id == userId);
+        const myLapanganNames = myLapangans.map(l => l.nm_lapangan);
 
         if (myLapangans.length === 0) {
           document.getElementById("venueName").textContent = "Belum ada venue";
@@ -298,8 +311,6 @@
         }
 
         const namaVenue = myLapangans[0].nm_lapangan;
-        const myLapanganNames = myLapangans.map(l => l.nm_lapangan); // Karena lapangan_id di membership bentuknya nama
-
         document.getElementById("venueName").textContent = namaVenue;
 
         // Ambil data pesanan
@@ -311,14 +322,15 @@
         const pesananData = await pesananRes.json();
 
         let totalPesanan = 0;
-        pesananData.data.forEach(pesanan => {
-          if (myLapangans.some(l => l.id === pesanan.lapangan_id)) {
-            const cleanHarga = parseInt(pesanan.total_harga.toString().replace(/[^\d]/g, ""));
-            totalPesanan += cleanHarga;
+        pesananData.data.forEach(p => {
+          // Bandingkan berdasarkan nama lapangan, bukan id
+          if (myLapanganNames.includes(p.lapangan_id)) {
+            const harga = parseInt(p.total_harga.toString().replace(/[^\d]/g, ""));
+            if (!isNaN(harga)) totalPesanan += harga;
           }
         });
 
-        // Ambil jenis membership
+        // Ambil data jenis membership
         const jenisRes = await fetch(`${API_BASE_URL}/jenismember`, {
           headers: {
             Authorization: `Bearer ${token}`
@@ -330,7 +342,7 @@
           jenisMap[j.nm_membership] = parseInt(j.harga.toString().replace(/[^\d]/g, ""));
         });
 
-        // Ambil data membership
+        // Ambil data member
         const memberRes = await fetch(`${API_BASE_URL}/member`, {
           headers: {
             Authorization: `Bearer ${token}`
@@ -340,12 +352,9 @@
 
         let totalMembership = 0;
         memberData.data.forEach(m => {
-          // Cuma tambahkan kalau membership ini milik lapangan user
           if (myLapanganNames.includes(m.lapangan_id)) {
             const harga = jenisMap[m.jenismember_id];
-            if (harga) {
-              totalMembership += harga;
-            }
+            if (!isNaN(harga)) totalMembership += harga;
           }
         });
 
@@ -355,6 +364,7 @@
 
       } catch (err) {
         console.error("Gagal hitung total pendapatan:", err);
+        document.getElementById("totalPendapatan").textContent = "Rp 0";
       }
     }
 
