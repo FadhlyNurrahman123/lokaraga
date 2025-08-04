@@ -95,22 +95,26 @@
       return date >= today;
     }
 
+    function formatRupiah(angka) {
+      if (!angka) return "-";
+      const clean = parseInt(angka.toString().replace(/[^\d]/g, ""));
+      return `Rp ${clean.toLocaleString("id-ID")}`;
+    }
+
     document.addEventListener("DOMContentLoaded", async () => {
       try {
-        // Ambil semua lapangan
         const lapanganRes = await fetch(`${API_BASE_URL}/lapangan`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
           },
         });
         const lapanganData = await lapanganRes.json();
         const myLapangans = lapanganData.data.filter(l => l.user_id === userId);
         const myLapanganNames = myLapangans.map(l => l.nm_lapangan);
 
-        // Ambil pesanan
         const res = await fetch(`${API_BASE_URL}/pesanan`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
           },
         });
         const result = await res.json();
@@ -119,7 +123,6 @@
         const sedangDiv = document.getElementById("pesanan-berlangsung");
         const selesaiDiv = document.getElementById("pesanan-selesai");
 
-        // Kosongkan container dulu
         sedangDiv.innerHTML = "";
         selesaiDiv.innerHTML = "";
 
@@ -138,18 +141,18 @@
           const card = document.createElement("div");
           card.className = "bg-white rounded-2xl shadow-md p-4 w-full max-w-2xl mb-4";
           card.innerHTML = `
-          <div class="flex justify-between items-center mb-4">
-            <p class="font-semibold text-md">ID transaksi: INV-${item.id}-FT</p>
-            <span class="text-[#1BE387] font-bold text-xl">${item.total_harga}</span>
+        <div class="flex justify-between items-center mb-4">
+          <p class="font-semibold text-md">ID transaksi: INV-${item.id}-FT</p>
+          <span class="text-[#1BE387] font-bold text-xl">${formatRupiah(item.total_harga)}</span>
+        </div>
+        <div class="flex justify-between items-start">
+          <div class="space-y-1">
+            <p class="text-sm text-gray-700">${item.lapangan_id}</p>
+            <p class="text-sm text-gray-700">${item.tanggal}</p>
           </div>
-          <div class="flex justify-between items-start">
-            <div class="space-y-1">
-              <p class="text-sm text-gray-700">${item.lapangan_id}</p>
-              <p class="text-sm text-gray-700">${item.tanggal}</p>
-            </div>
-            <a href="/pemilik/detail-riwayat/${item.id}" class="bg-[#FFE500] text-black px-4 py-1 text-sm rounded-full font-medium h-fit">Detail</a>
-          </div>
-        `;
+          <a href="/pemilik/detail-riwayat/${item.id}" class="bg-[#FFE500] text-black px-4 py-1 text-sm rounded-full font-medium h-fit">Detail</a>
+        </div>
+      `;
 
           if (isSedangBerlangsung(item.tanggal)) {
             sedangDiv.appendChild(card);
