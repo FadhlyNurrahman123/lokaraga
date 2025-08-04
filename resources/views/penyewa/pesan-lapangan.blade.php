@@ -129,6 +129,10 @@
 
     function renderLapangan(data) {
       const container = document.getElementById('lapangan-container');
+      const hargaFormat = (angka) => {
+        return "Rp " + Number(angka).toLocaleString("id-ID");
+      };
+
       container.innerHTML = '';
 
       if (data.length === 0) {
@@ -143,7 +147,7 @@
             <div class="p-5 space-y-4">
               <h3 class="text-xl font-bold text-center mt-3">${lapangan.nm_lapangan}</h3>
               <p class="text-xs text-gray-600 text-center">${lapangan.alamat}</p>
-              <p class="text-md text-center">${lapangan.harga} / jam</p>
+              <p class="text-md text-center">${hargaFormat(lapangan.harga)} / jam</p>
               <a href="/penyewa/detail-lapangan/${lapangan.id}" class="inline-block w-full bg-[#0F4BA1] text-white text-center mt-5 py-2 rounded-md hover:bg-blue-800 transition">Detail Lapangan</a>
             </div>
           </div>

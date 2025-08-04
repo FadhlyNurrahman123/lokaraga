@@ -71,12 +71,6 @@
     </div>
     <hr class="w-full border-t-2 border-black opacity-20">
 
-    <div id="addVenueContainer" class="mt-6 hidden">
-      <a href="/pemilik/kelola" class="inline-block bg-[#FFE500] text-black px-6 py-3 rounded-full font-semibold hover:bg-[#FFE500] transition">
-        Daftarkan Venue Anda
-      </a>
-    </div>
-
     <div class="gap-8 mt-6">
       <div class="bg-blue text-white rounded-2xl p-8 flex justify-between items-center">
         <div>
@@ -106,10 +100,17 @@
         <div id="membershipContainer" class="space-y-4"></div>
       </div>
     </div>
+    <div id="addVenueContainer" class="mt-6 hidden flex flex-col items-center">
+      <a href="/pemilik/kelola" class="w-[300px] inline-block bg-[#FFE500] text-black px-6 py-3 rounded-2xl hover:bg-[#FFD700] transition flex flex-col items-center">
+        <img src="/images/add.png" alt="Tambah" class="w-7 h-7 mb-1" />
+        Daftarkan Venue Anda
+      </a>
+    </div>
+
   </main>
   <script>
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("user_id");
+    const userId = parseInt(localStorage.getItem("user_id"));
     const pesananContainer = document.getElementById("pesananContainer");
     const membershipContainer = document.getElementById("membershipContainer");
     const addVenueContainer = document.getElementById("addVenueContainer");
@@ -136,16 +137,40 @@
 
     async function loadPesanan() {
       try {
-        const res = await fetch(`${API_BASE_URL}/pesanan`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        const result = await res.json();
-        result.data.forEach(item => {
-          const card = document.createElement("div");
-          card.className = "bg-white rounded-2xl p-4 shadow-md";
-          card.innerHTML = `
+        const [lapanganRes, pesananRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/lapangan`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }),
+          fetch(`${API_BASE_URL}/pesanan`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+        ]);
+
+        const lapanganData = await lapanganRes.json();
+        const myLapangans = lapanganData.data.filter(l => l.user_id == userId);
+        const myLapanganIds = myLapangans.map(l => l.id);
+        const myLapanganNames = myLapangans.map(l => l.nm_lapangan);
+        const pesananData = await pesananRes.json();
+        const filteredPesanan = pesananData.data.filter(p =>
+          myLapanganNames.includes(p.lapangan_id)
+        );
+
+        pesananContainer.innerHTML = '';
+
+        if (filteredPesanan.length === 0) {
+          const emptyCard = document.createElement("div");
+          emptyCard.className = "bg-white rounded-2xl p-20 flex items-center justify-center shadow-md";
+          emptyCard.innerHTML = `<p class="italic text-center">Belum ada data pesanan</p>`;
+          pesananContainer.appendChild(emptyCard);
+        } else {
+          filteredPesanan.forEach(item => {
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-2xl p-4 shadow-md";
+            card.innerHTML = `
           <div class="flex justify-between items-center mb-2">
             <p class="font-semibold text-md">ID transaksi: INV-${item.id}-FT</p>
             <span class="text-[#1BE387] font-bold text-xl">${item.total_harga}</span>
@@ -158,8 +183,9 @@
             <a href="/pemilik/detail-riwayat/${item.id}" class="bg-[#FFE500] text-black px-4 py-1 text-sm rounded-full font-medium h-fit">Detail</a>
           </div>
         `;
-          pesananContainer.appendChild(card);
-        });
+            pesananContainer.appendChild(card);
+          });
+        }
       } catch (e) {
         console.error("Gagal ambil pesanan:", e);
       }
@@ -187,13 +213,25 @@
       });
       const result = await res.json();
       result.data.forEach(jm => {
-        // mapping berdasarkan nama, bukan ID
         jenisMemberMap[jm.nm_membership] = jm;
       });
+      loadMembership();
     }
+
 
     async function loadMembership() {
       try {
+        // Ambil semua lapangan milik user login
+        const lapanganRes = await fetch(`${API_BASE_URL}/lapangan`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const lapanganData = await lapanganRes.json();
+        const myLapangans = lapanganData.data.filter(l => l.user_id == userId);
+        const myLapanganNames = myLapangans.map(l => l.nm_lapangan); // karena lapangan_id di membership berupa nama
+
+        // Ambil semua data membership
         const memberRes = await fetch(`${API_BASE_URL}/member`, {
           headers: {
             Authorization: `Bearer ${token}`
@@ -201,12 +239,24 @@
         });
         const memberData = await memberRes.json();
 
+        // Filter hanya membership yang match dengan lapangan user ini
+        const myMemberships = memberData.data.filter(m => myLapanganNames.includes(m.lapangan_id));
+
         membershipContainer.innerHTML = '';
 
-        memberData.data.forEach(item => {
-          const jenis = jenisMemberMap[item.jenismember_id];
+        if (myMemberships.length === 0) {
+          const emptyCard = document.createElement("div");
+          emptyCard.className = "bg-white rounded-2xl p-20 flex items-center justify-center shadow-md";
+          emptyCard.innerHTML = `<p class="italic text-center">Belum ada data membership</p>`;
+          membershipContainer.appendChild(emptyCard);
+          return;
+        }
+
+        // Tampilkan list membership
+        myMemberships.forEach(item => {
+          const jenis = jenisMemberMap[item.jenismember_id]; // key-nya nama: "Membership Tahunan"
           const nama = item.jenismember_id;
-          const harga = jenis?.harga || "-";
+          const harga = jenis?.harga ? `Rp ${Number(jenis.harga).toLocaleString("id-ID")}` : "-";
 
           const card = document.createElement("div");
           card.className = "bg-white rounded-2xl p-4 shadow-md";
@@ -218,9 +268,7 @@
         <div class="flex justify-between items-start">
           <div class="space-y-1">
             <p class="text-sm text-gray-700">${item.user_id}</p>
-            <p class="text-sm text-gray-700">
-              ${getMembershipDurationLabel(item.tgl_mulai, item.tgl_selesai)}
-            </p>
+            <p class="text-sm text-gray-700">${getMembershipDurationLabel(item.tgl_mulai, item.tgl_selesai)}</p>
           </div>
           <a href="/pemilik/detail-membership/${item.id}" class="bg-[#FFE500] text-black px-4 py-1 text-sm rounded-full font-medium h-fit">Detail</a>
         </div>
@@ -250,6 +298,8 @@
         }
 
         const namaVenue = myLapangans[0].nm_lapangan;
+        const myLapanganNames = myLapangans.map(l => l.nm_lapangan); // Karena lapangan_id di membership bentuknya nama
+
         document.getElementById("venueName").textContent = namaVenue;
 
         // Ambil data pesanan
@@ -261,10 +311,9 @@
         const pesananData = await pesananRes.json();
 
         let totalPesanan = 0;
-
         pesananData.data.forEach(pesanan => {
-          if (myLapangans.some(l => l.nm_lapangan === pesanan.lapangan_id)) {
-            const cleanHarga = parseInt(pesanan.total_harga.replace(/[^\d]/g, ""));
+          if (myLapangans.some(l => l.id === pesanan.lapangan_id)) {
+            const cleanHarga = parseInt(pesanan.total_harga.toString().replace(/[^\d]/g, ""));
             totalPesanan += cleanHarga;
           }
         });
@@ -276,10 +325,9 @@
           }
         });
         const jenisData = await jenisRes.json();
-
         const jenisMap = {};
         jenisData.data.forEach(j => {
-          jenisMap[j.nm_membership] = parseInt(j.harga.replace(/[^\d]/g, ""));
+          jenisMap[j.nm_membership] = parseInt(j.harga.toString().replace(/[^\d]/g, ""));
         });
 
         // Ambil data membership
@@ -292,9 +340,12 @@
 
         let totalMembership = 0;
         memberData.data.forEach(m => {
-          const harga = jenisMap[m.jenismember_id];
-          if (harga) {
-            totalMembership += harga;
+          // Cuma tambahkan kalau membership ini milik lapangan user
+          if (myLapanganNames.includes(m.lapangan_id)) {
+            const harga = jenisMap[m.jenismember_id];
+            if (harga) {
+              totalMembership += harga;
+            }
           }
         });
 
@@ -307,12 +358,9 @@
       }
     }
 
-
     cekVenueSaya();
     loadPesanan();
-    loadJenisMemberList().then(() => {
-      loadMembership();
-    });
+    loadJenisMemberList();
     loadPendapatan();
   </script>
 </body>

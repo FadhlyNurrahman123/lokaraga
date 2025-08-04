@@ -85,6 +85,7 @@
   </main>
   <script>
     const token = localStorage.getItem("token");
+    const userId = parseInt(localStorage.getItem("user_id"));
 
     function isSedangBerlangsung(dateStr) {
       const today = new Date();
@@ -96,20 +97,44 @@
 
     document.addEventListener("DOMContentLoaded", async () => {
       try {
+        // Ambil semua lapangan
+        const lapanganRes = await fetch(`${API_BASE_URL}/lapangan`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const lapanganData = await lapanganRes.json();
+        const myLapangans = lapanganData.data.filter(l => l.user_id === userId);
+        const myLapanganNames = myLapangans.map(l => l.nm_lapangan);
+
+        // Ambil pesanan
         const res = await fetch(`${API_BASE_URL}/pesanan`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        if (!res.ok) throw new Error("Gagal memuat data pesanan");
         const result = await res.json();
         const pesanan = result.data;
 
         const sedangDiv = document.getElementById("pesanan-berlangsung");
         const selesaiDiv = document.getElementById("pesanan-selesai");
 
-        pesanan.forEach((item) => {
+        // Kosongkan container dulu
+        sedangDiv.innerHTML = "";
+        selesaiDiv.innerHTML = "";
+
+        const filteredPesanan = pesanan.filter(p => myLapanganNames.includes(p.lapangan_id));
+
+        if (filteredPesanan.length === 0) {
+          const emptyCard = document.createElement("div");
+          emptyCard.className = "bg-white rounded-2xl shadow-md p-20 italic text-center";
+          emptyCard.textContent = "Belum ada data pesanan";
+          sedangDiv.appendChild(emptyCard.cloneNode(true));
+          selesaiDiv.appendChild(emptyCard);
+          return;
+        }
+
+        filteredPesanan.forEach((item) => {
           const card = document.createElement("div");
           card.className = "bg-white rounded-2xl shadow-md p-4 w-full max-w-2xl mb-4";
           card.innerHTML = `

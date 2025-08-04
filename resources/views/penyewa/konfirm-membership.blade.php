@@ -108,90 +108,85 @@
       <p class="text-center">Berhasil</p>
     </div>
   </main>
+
   <script>
-  function getQueryParams() {
-    const params = new URLSearchParams(window.location.search);
-    return {
-      id: params.get("id"),
-    };
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const { id } = getQueryParams();
-    const token = localStorage.getItem("token");
-
-    console.log("Membership ID dari URL:", id);
-    console.log("Token dari localStorage:", token);
-
-    if (!id || !token) {
-      alert("ID membership atau token tidak ditemukan");
-      return;
+    function getQueryParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const membershipId = urlParams.get("id");
+      const lapanganId = urlParams.get("lapangan_id");
+      return { membershipId, lapanganId };
     }
 
-    fetch(`${API_BASE_URL}/jenismember/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        const data = result.data;
-        console.log("Data membership:", data);
+    document.addEventListener("DOMContentLoaded", () => {
+      const { membershipId, lapanganId } = getQueryParams();
 
-        document.getElementById("lapangan").textContent = data.nm_membership || "-";
-        document.getElementById("harga").textContent = data.harga || "-";
-        document.getElementById("tanggal").textContent = data.masa_berlaku || "-";
-        document.getElementById("jam").textContent = "1x / minggu";
-        document.getElementById("total").textContent = data.harga || "-";
+      const token = localStorage.getItem("token");
 
-        const today = new Date();
-        const tgl_mulai = today.toISOString().split("T")[0];
-        const tgl_selesai = new Date(today);
-        tgl_selesai.setFullYear(today.getFullYear() + 1);
-        const tgl_selesai_str = tgl_selesai.toISOString().split("T")[0];
+      if (!membershipId || !token) {
+        alert("ID membership atau token tidak ditemukan");
+        return;
+      }
 
-        console.log("Tanggal Mulai:", tgl_mulai);
-        console.log("Tanggal Selesai:", tgl_selesai_str);
-
-        document.getElementById("pesanBtn").addEventListener("click", async () => {
-          try {
-            const response = await fetch(`${API_BASE_URL}/Createmember`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                tgl_mulai: tgl_mulai,
-                tgl_selesai: tgl_selesai_str,
-                jenismember_id: parseInt(id),
-              }),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-              document.getElementById("popupBerhasil").classList.remove("hidden");
-              setTimeout(() => {
-                document.getElementById("popupBerhasil").classList.add("hidden");
-              }, 2000);
-            } else {
-              alert("Gagal memesan membership: " + (result.message || "Terjadi kesalahan."));
-            }
-          } catch (error) {
-            console.error("Error saat fetch Createmember:", error);
-            alert("Terjadi kesalahan saat memesan membership.");
-          }
-        });
+      fetch(`${API_BASE_URL}/jenismember/${membershipId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch((error) => {
-        console.error("Gagal memuat detail membership:", error);
-        alert("Gagal memuat data membership.");
-      });
-  });
-</script>
+        .then((response) => response.json())
+        .then((result) => {
+          const data = result.data;
+          const hargaFormatted = "Rp " + Number(data.harga).toLocaleString("id-ID");
+          document.getElementById("lapangan").textContent = data.nm_membership || "-";
+          document.getElementById("harga").textContent = hargaFormatted;
+          document.getElementById("tanggal").textContent = data.masa_berlaku || "-";
+          document.getElementById("jam").textContent = "1x / minggu";
+          document.getElementById("total").textContent = hargaFormatted;
 
+          const today = new Date();
+          const tgl_mulai = today.toISOString().split("T")[0];
+          const tgl_selesai = new Date(today);
+          tgl_selesai.setFullYear(today.getFullYear() + 1);
+          const tgl_selesai_str = tgl_selesai.toISOString().split("T")[0];
 
+          document.getElementById("pesanBtn").addEventListener("click", async () => {
+            try {
+              const response = await fetch(`${API_BASE_URL}/Createmember`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  tgl_mulai: tgl_mulai,
+                  tgl_selesai: tgl_selesai_str,
+                  jenismember_id: parseInt(membershipId),
+                  lapangan_id: parseInt(lapanganId),
+                }),
+              });
+
+              const result = await response.json();
+
+              if (response.ok) {
+                document.getElementById("popupBerhasil").classList.remove("hidden");
+                setTimeout(() => {
+                  document.getElementById("popupBerhasil").classList.add("hidden");
+                }, 2000);
+              } else {
+                alert("Gagal memesan membership: " + (result.message || "Terjadi kesalahan."));
+              }
+            } catch (error) {
+              console.error("Error saat fetch Createmember:", error);
+              alert("Terjadi kesalahan saat memesan membership.");
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Gagal memuat detail membership:", error);
+          alert("Gagal memuat data membership.");
+        });
+    });
+  </script>
 </body>
 
 </html>

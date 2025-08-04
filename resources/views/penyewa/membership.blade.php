@@ -129,6 +129,16 @@
             </div>
         </div>
     </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const lapanganId = localStorage.getItem("lapangan_id");
+
+            const membershipLink = document.querySelector('a[href="/penyewa/pilihan-membership"]');
+            if (membershipLink && lapanganId) {
+                membershipLink.href = `/penyewa/pilihan-membership?lapangan_id=${lapanganId}`;
+            }
+        });
+    </script>
 </body>
 
 </html>

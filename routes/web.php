@@ -39,6 +39,7 @@ Route::prefix('pemilik')->group(function () {
 // Admin
 Route::prefix('admin')->group(function () {
     Route::view('daftar-pemilik', 'admin.daftar-pemilik');
+    Route::view('tambah-pemilik', 'admin.tambah-pemilik');
     Route::view('daftar-penyewa', 'admin.daftar-penyewa');
     Route::view('akun', 'admin.akun');
 });

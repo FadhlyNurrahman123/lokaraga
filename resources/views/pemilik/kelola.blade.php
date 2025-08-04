@@ -1,177 +1,252 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8" />
-    <title>Kelola Venue - LokaRaga</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/js/config.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Reem+Kufi&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <title>Kelola Venue - LokaRaga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/js/config.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Reem+Kufi&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
 
-        .font-reem {
-            font-family: 'Reem Kufi', sans-serif;
-        }
+    .font-reem {
+      font-family: 'Reem Kufi', sans-serif;
+    }
 
-        .bg-blue {
-            background-color: #0F4BA1;
-        }
+    .bg-blue {
+      background-color: #0F4BA1;
+    }
 
-        input:read-only {
-            background-color: #f1f5f9;
-            border: 1px solid #dbeafe;
-        }
+    input, textarea, select {
+      outline: 1px solid #D1E5F5;
+      outline-offset: 0px;
+    }
 
-        input::placeholder,
-        textarea::placeholder {
-            font-weight: normal;
-            color: #9CA3AF;
-        }
+    input:read-only {
+      background-color: #f1f5f9;
+      border: 1px solid #dbeafe;
+    }
 
-        input,
-        textarea {
-            outline: 1px solid #D1E5F5;
-            outline-offset: 0px;
-        }
-    </style>
+    input::placeholder,
+    textarea::placeholder {
+      font-weight: normal;
+      color: #9CA3AF;
+    }
+  </style>
 </head>
 
 <body class="flex min-h-screen bg-white">
-    <aside class="w-64 bg-blue text-white p-6 flex flex-col space-y-6">
-        <div class="mb-3">
-            <div class="flex items-center space-x-3">
-                <img src="/images/logo2.png" alt="Logo" class="h-10">
-                <span class="text-white text-2xl font-reem font-bold mt-5">LokaRaga</span>
-            </div>
-            <hr class="mt-5 border-t-2 border-white opacity-100">
-        </div>
-        <nav class="space-y-4">
-            <a href="/pemilik/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
-                <img src="/images/beranda-white.png" class="h-5" alt="Beranda">
-                <span>Beranda</span>
-            </a>
-            <a href="/pemilik/kelola" class="flex items-center space-x-3 px-4 py-2 bg-[#CCDBED] text-black rounded-lg font-semibold">
-                <img src="/images/pesan-black.png" class="h-5" alt="Kelola">
-                <span>Kelola</span>
-            </a>
-            <a href="/pemilik/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
-                <img src="/images/riwayat-white.png" class="h-5" alt="Riwayat">
-                <span>Riwayat</span>
-            </a>
-            <a href="/pemilik/membership" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
-                <img src="/images/membership-white.png" class="h-5" alt="Membership">
-                <span>Membership</span>
-            </a>
-            <a href="/pemilik/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition">
-                <img src="/images/akun-white.png" class="h-5" alt="Akun">
-                <span>Akun</span>
-            </a>
-        </nav>
-    </aside>
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-blue text-white p-6 flex flex-col space-y-6">
+    <div class="mb-3">
+      <div class="flex items-center space-x-3">
+        <img src="/images/logo2.png" alt="Logo" class="h-10">
+        <span class="text-white text-2xl font-reem font-bold mt-5">LokaRaga</span>
+      </div>
+      <hr class="mt-5 border-t-2 border-white opacity-100">
+    </div>
+    <nav class="space-y-4">
+      <a href="/pemilik/beranda" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition"><img src="/images/beranda-white.png" class="h-5"><span>Beranda</span></a>
+      <a href="/pemilik/kelola" class="flex items-center space-x-3 px-4 py-2 bg-[#CCDBED] text-black rounded-lg font-semibold"><img src="/images/pesan-black.png" class="h-5"><span>Kelola</span></a>
+      <a href="/pemilik/riwayat" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition"><img src="/images/riwayat-white.png" class="h-5"><span>Riwayat</span></a>
+      <a href="/pemilik/membership" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition"><img src="/images/membership-white.png" class="h-5"><span>Membership</span></a>
+      <a href="/pemilik/akun" class="flex items-center space-x-3 px-4 py-2 hover:bg-[#4A5D7B] rounded-lg transition"><img src="/images/akun-white.png" class="h-5"><span>Akun</span></a>
+    </nav>
+  </aside>
 
-    <main class="flex-1 p-8">
-        <div class="flex justify-between items-center mb-5">
-            <h1 class="text-xl">Kelola</h1>
-            <div class="flex items-center gap-3">
-                <div class="relative w-60">
-                    <input type="text" placeholder="Search..." class="w-full py-2 pl-4 pr-10 text-black placeholder:text-sm border border-black rounded-md focus:outline-none">
-                    <img src="/images/icon-search.png" alt="Search" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5">
-                </div>
-                <a href="/pemilik/akun">
-                    <img src="/images/icon-profile.png" class="h-10 cursor-pointer" alt="Profile" />
-                </a>
-            </div>
+  <main class="flex-1 p-8">
+    <div class="flex justify-between items-center mb-5">
+      <h1 class="text-xl" id="judul-form">Kelola</h1>
+    </div>
+    <hr class="w-full border-t-2 border-black opacity-20 mb-8">
+
+    <form id="form-venue">
+      <div class="grid grid-cols-12 gap-x-8 gap-y-6 mb-6">
+        <div class="col-span-6">
+          <label class="block mb-1">Nama Venue</label>
+          <input type="text" id="nama" class="w-full rounded-md px-3 py-2" required />
         </div>
 
-        <hr class="w-full border-t-2 border-black opacity-20 mb-8">
-
-        <div class="grid grid-cols-12 gap-x-8 gap-y-6 mb-6">
-            <div class="col-span-6">
-                <label class="block mb-1">Nama Venue</label>
-                <input type="text" id="nama" readonly class="w-full rounded-md px-3 py-2" />
-            </div>
-            <div class="col-span-6">
-                <label class="block mb-1">Jam Operasional</label>
-                <div class="flex items-center gap-4">
-                    <span class="text-gray-400">Buka</span>
-                    <input type="text" id="jam-buka" readonly class="w-24 rounded-md px-2 py-1" />
-                    <span class="text-gray-400">Tutup</span>
-                    <input type="text" id="jam-tutup" readonly class="w-24 rounded-md px-2 py-1" />
-                </div>
-            </div>
-            <div class="col-span-6">
-                <label class="block mb-1">Alamat Venue</label>
-                <input type="text" id="alamat" readonly class="w-full rounded-md px-3 py-2" />
-            </div>
-            <div class="col-span-6">
-                <label class="block mb-1">Jenis Olahraga</label>
-                <input type="text" id="olahraga" readonly class="w-full rounded-md px-3 py-2 mb-4" />
-            </div>
-            <div class="col-span-12 md:col-span-6">
-                <label class="block mb-1">Foto Venue</label>
-                <img id="foto" src="" alt="Foto Venue" class="w-full rounded-xl shadow" />
-            </div>
-            <div class="col-span-12 md:col-span-6 p-1">
-                <label class="block mb-1">Fasilitas</label>
-                <div class="grid grid-cols-2 gap-x-4">
-                    <ul id="fasilitas-kiri" class="list-disc list-inside text-sm space-y-1"></ul>
-                    <ul id="fasilitas-kanan" class="list-disc list-inside text-sm space-y-1"></ul>
-                </div>
-            </div>
+        <div class="col-span-6">
+          <label class="block mb-1">Jam Operasional</label>
+          <div class="flex items-center gap-4">
+            <span class="text-gray-400">Buka</span>
+            <input type="time" id="jam-buka" class="w-24 rounded-md px-2 py-1" required />
+            <span class="text-gray-400">Tutup</span>
+            <input type="time" id="jam-tutup" class="w-24 rounded-md px-2 py-1" required />
+          </div>
         </div>
 
-        <div class="flex justify-center">
-            <a href="/pemilik/edit-lapangan" class="bg-blue text-white px-10 py-2 rounded-full font-medium shadow-md hover:bg-[#0d3f86] transition mt-5 w-72 text-center">
-                Edit
-            </a>
+        <div class="col-span-6">
+          <label class="block mb-1">Alamat Venue</label>
+          <input type="text" id="alamat" class="w-full rounded-md px-3 py-2" required />
         </div>
-    </main>
 
-    <script>
-        const token = localStorage.getItem("token");
+        <div class="col-span-6">
+          <label class="block mb-1">Jenis Olahraga</label>
+          <select id="olahraga" class="w-full rounded-md px-3 py-2 mb-4" required></select>
 
-        async function fetchVenue() {
-            try {
-                const profileRes = await fetch(`${API_BASE_URL}/profile`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const profile = await profileRes.json();
-                const userId = profile.id;
+          <label class="block mb-1">Fasilitas</label>
+          <div id="fasilitas-list" class="grid grid-cols-2 gap-x-4 gap-y-2 mb-4"></div>
+          <div class="flex">
+            <input type="text" id="fasilitas-input" class="flex-1 rounded-l-md px-3 py-2 border" placeholder="Tambah fasilitas..." />
+            <button type="button" id="fasilitas-tambah" class="bg-blue text-white px-4 rounded-r-md hover:bg-[#0d3f86] transition">Tambah</button>
+          </div>
+        </div>
 
-                const lapanganRes = await fetch(`${API_BASE_URL}/lapangan?user_id=${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const lapanganData = await lapanganRes.json();
-                const data = lapanganData.data[0];
+        <div class="col-span-12 md:col-span-6">
+          <label class="block mb-1">Foto Venue</label>
+          <img id="foto-preview" src="" alt="Foto Venue" class="w-full rounded-xl shadow mb-2 hidden" />
+          <input type="file" id="foto" accept="image/*" />
+        </div>
+      </div>
 
-                document.getElementById("nama").value = data.nm_lapangan;
-                document.getElementById("alamat").value = data.alamat;
-                document.getElementById("jam-buka").value = data.jam_buka_operasional.slice(0, 5);
-                document.getElementById("jam-tutup").value = data.jam_tutup_operasional.slice(0, 5);
-                document.getElementById("olahraga").value = data.jenis_olahraga_id;
-                document.getElementById("foto").src = `/storage/${data.foto}`;
+      <div class="flex justify-center">
+        <button type="submit" class="bg-blue text-white px-10 py-2 rounded-full font-medium shadow-md hover:bg-[#0d3f86] transition mt-5 w-72" id="submit-btn">
+          Simpan
+        </button>
+      </div>
+    </form>
+  </main>
 
-                const fasilitas = data.fasilitas.split(", ");
-                const tengah = Math.ceil(fasilitas.length / 2);
-                const kiri = fasilitas.slice(0, tengah);
-                const kanan = fasilitas.slice(tengah);
-                document.getElementById("fasilitas-kiri").innerHTML = kiri.map(f => `<li>${f}</li>`).join("");
-                document.getElementById("fasilitas-kanan").innerHTML = kanan.map(f => `<li>${f}</li>`).join("");
+  <script>
+    const token = localStorage.getItem("token");
+    let lapanganId = null;
+    let userId = null;
+    let fasilitasData = [];
+    let isEdit = false;
 
-            } catch (err) {
-                console.error(err);
-            }
+    const fasilitasInput = document.getElementById("fasilitas-input");
+    const fasilitasList = document.getElementById("fasilitas-list");
+    const fasilitasTambah = document.getElementById("fasilitas-tambah");
+
+    fasilitasTambah.addEventListener("click", () => {
+      const text = fasilitasInput.value.trim();
+      if (text !== "") {
+        fasilitasData.push(text);
+        fasilitasInput.value = "";
+        renderFasilitas();
+      }
+    });
+
+    function renderFasilitas() {
+      fasilitasList.innerHTML = fasilitasData.map(f => `
+        <div class="flex items-center gap-2 bg-gray-100 rounded px-2 py-1">
+          <span class="text-sm">${f}</span>
+          <button type="button" class="text-red-500 text-sm" onclick="hapusFasilitas('${f}')">&times;</button>
+        </div>
+      `).join("");
+    }
+
+    window.hapusFasilitas = function(f) {
+      fasilitasData = fasilitasData.filter(item => item !== f);
+      renderFasilitas();
+    }
+
+    async function loadJenisOlahraga(selectedId = null) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/jenisolahraga`);
+        const data = await res.json();
+        const select = document.getElementById("olahraga");
+
+        select.innerHTML = data.data.map(j => `
+          <option value="${j.id}" ${j.id == selectedId ? "selected" : ""}>${j.nm_jenisolahraga}</option>
+        `).join("");
+      } catch (err) {
+        console.error("Gagal muat jenis olahraga:", err);
+      }
+    }
+
+    async function getDataLapangan() {
+      try {
+        const profile = await fetch(`${API_BASE_URL}/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).then(res => res.json());
+        userId = profile.id;
+
+        const lapangan = await fetch(`${API_BASE_URL}/lapangan?user_id=${userId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).then(res => res.json());
+
+        const data = lapangan.data[0];
+
+        if (!data) {
+          // User belum punya lapangan → Form Daftar
+          isEdit = false;
+          await loadJenisOlahraga();
+          return;
         }
 
-        document.addEventListener("DOMContentLoaded", fetchVenue);
-    </script>
-</body>
+        // User sudah punya lapangan → Form Edit
+        isEdit = true;
+        lapanganId = data.id;
 
+        document.getElementById("nama").value = data.nm_lapangan;
+        document.getElementById("alamat").value = data.alamat;
+        document.getElementById("jam-buka").value = data.jam_buka_operasional?.slice(0, 5);
+        document.getElementById("jam-tutup").value = data.jam_tutup_operasional?.slice(0, 5);
+        document.getElementById("foto-preview").src = `/storage/${data.foto}`;
+        document.getElementById("foto-preview").classList.remove("hidden");
+
+        fasilitasData = data.fasilitas ? data.fasilitas.split(",").map(f => f.trim()) : [];
+        renderFasilitas();
+        await loadJenisOlahraga(data.jenis_olahraga_id);
+      } catch (err) {
+        console.error(err);
+        alert("Gagal memuat data");
+      }
+    }
+
+    document.getElementById("form-venue").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append("user_id", userId);
+      formData.append("nm_lapangan", document.getElementById("nama").value);
+      formData.append("alamat", document.getElementById("alamat").value);
+      formData.append("jam_buka_operasional", document.getElementById("jam-buka").value);
+      formData.append("jam_tutup_operasional", document.getElementById("jam-tutup").value);
+      formData.append("jenis_olahraga_id", document.getElementById("olahraga").value);
+      formData.append("fasilitas", fasilitasData.join(", "));
+      formData.append("harga", "60000");
+
+      const fotoFile = document.getElementById("foto").files[0];
+      if (fotoFile) formData.append("foto", fotoFile);
+
+      const url = isEdit
+        ? `${API_BASE_URL}/Updatelapangan/${lapanganId}`
+        : `${API_BASE_URL}/Createlapangan`;
+
+      if (isEdit) formData.append("_method", "PUT");
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          body: formData,
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          alert("Data berhasil disimpan!");
+          location.reload();
+        } else {
+          console.error("RESPON ERROR:", result);
+          alert("Gagal simpan: " + (result.message || JSON.stringify(result.errors)));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan saat menyimpan.");
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", getDataLapangan);
+  </script>
+</body>
 </html>

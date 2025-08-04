@@ -94,6 +94,7 @@
             const role_id = user.role_id;
             localStorage.setItem("role_id", role_id);
             localStorage.setItem("user_name", user.nama);
+            localStorage.setItem("user_id", user.id);
 
             alert("Login berhasil!");
 

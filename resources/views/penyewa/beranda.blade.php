@@ -132,16 +132,16 @@
                         '/images/placeholder.jpg';
 
                     container.innerHTML += `
-        <div class="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-          <div class="h-40 w-full overflow-hidden">
-            <img src="${imageUrl}" alt="${venue.nm_lapangan}" class="w-full h-full object-cover">
-          </div>
-          <div class="p-4 bg-white">
-            <h3 class="font-bold text-black">${venue.nm_lapangan}</h3>
-            <p class="text-sm text-gray-600">${venue.alamat}</p>
-            <p class="text-sm text-right font-semibold text-gray-800">${venue.jenis_olahraga_id || '-'}</p>
-          </div>
-        </div>`;
+                    <div class="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <div class="h-40 w-full overflow-hidden">
+                        <img src="${imageUrl}" alt="${venue.nm_lapangan}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 bg-white">
+                        <h3 class="font-bold text-black">${venue.nm_lapangan}</h3>
+                        <p class="text-sm text-gray-600">${venue.alamat}</p>
+                        <p class="text-sm text-right font-semibold text-gray-800">${venue.jenis_olahraga_id || '-'}</p>
+                    </div>
+                    </div>`;
                 });
             } catch (e) {
                 console.error('Gagal ambil venue:', e);

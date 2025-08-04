@@ -56,21 +56,21 @@
     </aside>
 
     <main class="flex-1 p-8">
-    <div class="flex justify-between items-center mb-5">
-      <div class="flex items-center space-x-2">
-        <h1 class="text-xl">Membership</h1>
-      </div>
-      <div class="flex items-center gap-3">
-        <div class="relative w-60">
-          <input type="text" placeholder="Search..." class="w-full py-2 pl-4 pr-10 text-black placeholder-black placeholder:text-sm border border-black rounded-md focus:outline-none">
-          <img src="/images/icon-search.png" alt="Search" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5">
+        <div class="flex justify-between items-center mb-5">
+            <div class="flex items-center space-x-2">
+                <h1 class="text-xl">Membership</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="relative w-60">
+                    <input type="text" placeholder="Search..." class="w-full py-2 pl-4 pr-10 text-black placeholder-black placeholder:text-sm border border-black rounded-md focus:outline-none">
+                    <img src="/images/icon-search.png" alt="Search" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5">
+                </div>
+                <a href="/pemilik/akun">
+                    <img src="/images/icon-profile.png" class="h-10 cursor-pointer" alt="Profile" />
+                </a>
+            </div>
         </div>
-        <a href="/pemilik/akun">
-          <img src="/images/icon-profile.png" class="h-10 cursor-pointer" alt="Profile" />
-        </a>
-      </div>
-    </div>
-    <hr class="w-full border-t-2 border-black opacity-20 mb-8">
+        <hr class="w-full border-t-2 border-black opacity-20 mb-8">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg">Daftar Membership</h2>
             <a href="/pemilik/tambah-membership" class="bg-[#0F4BA1] text-white px-4 py-2 rounded-xl font-semibold text-sm flex items-center gap-2 shadow-md hover:bg-[#0d3f86] transition">
@@ -79,51 +79,61 @@
         </div>
         <div id="membershipList" class="flex flex-wrap justify-between gap-2 mt-4"></div>
     </main>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch(`${API_BASE_URL}/jenismember`, {
+        document.addEventListener("DOMContentLoaded", async function() {
+            const token = localStorage.getItem("token");
+            const userId = localStorage.getItem("user_id");
+            const list = document.getElementById("membershipList");
+
+            try {
+                const jenisRes = await fetch(`${API_BASE_URL}/jenismember`, {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                })
-                .then(response => response.json())
-                .then(result => {
-                    const list = document.getElementById("membershipList");
-                    const data = result.data;
-
-                    if (!data || data.length === 0) {
-                        list.innerHTML = '<p class="text-gray-600">Belum ada data membership.</p>';
-                        return;
-                    }
-
-                    list.innerHTML = '';
-                    data.forEach(item => {
-                        const card = document.createElement("div");
-                        card.className = "bg-white rounded-2xl shadow-md p-4 w-full max-w-2xl mb-4";
-
-                        card.innerHTML = `
-                            <div class="flex justify-between items-center mb-2">
-                            <p class="font-bold text-md">${item.nm_membership}</p>
-                            <span class="text-[#1BE387] font-bold text-xl">${formatHarga(item.harga)}</span>
-                            </div>
-                            <div class="flex justify-between items-start">
-                            <div class="space-y-1">
-                                <p class="text-sm text-gray-700">${item.deskripsi}</p>
-                            </div>
-                            <button onclick="lihatDetailMembership(${item.id})"
-                                class="bg-[#FFE500] text-black px-4 py-1 text-sm rounded-full font-medium h-fit">
-                                Detail
-                            </button>
-                            </div>
-                        `;
-                        list.appendChild(card);
-                    });
-                })
-                .catch(error => {
-                    console.error("Gagal memuat data:", error);
-                    document.getElementById("membershipList").innerHTML =
-                        `<p class="text-red-500">Gagal memuat data.</p>`;
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
+                const jenisData = await jenisRes.json();
+                const allMembership = jenisData.data;
+                const userName = localStorage.getItem("user_name"); 
+
+                const filteredMembership = allMembership.filter(jm => jm.user_id === userName);
+
+                list.innerHTML = '';
+
+                if (filteredMembership.length === 0) {
+                    const emptyCard = document.createElement("div");
+                    emptyCard.className = "bg-white rounded-2xl p-20 flex items-center justify-center shadow-md w-full";
+                    emptyCard.innerHTML = `<p class="italic text-center text-gray-600">Belum ada data membership.</p>`;
+                    list.appendChild(emptyCard);
+                    return;
+                }
+
+                filteredMembership.forEach(item => {
+                    const card = document.createElement("div");
+                    card.className = "bg-white rounded-2xl shadow-md p-4 w-full max-w-2xl mb-4";
+
+                    card.innerHTML = `
+            <div class="flex justify-between items-center mb-2">
+              <p class="font-bold text-md">${item.nm_membership}</p>
+              <span class="text-[#1BE387] font-bold text-xl">${formatHarga(item.harga)}</span>
+            </div>
+            <div class="flex justify-between items-start">
+              <div class="space-y-1">
+                <p class="text-sm text-gray-700">${item.deskripsi}</p>
+              </div>
+              <button onclick="lihatDetailMembership(${item.id})"
+                class="bg-[#FFE500] text-black px-4 py-1 text-sm rounded-full font-medium h-fit">
+                Detail
+              </button>
+            </div>
+          `;
+                    list.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Gagal memuat data:", error);
+                list.innerHTML = `<p class="text-red-500">Gagal memuat data.</p>`;
+            }
 
             function formatHarga(angka) {
                 if (typeof angka === "string") {

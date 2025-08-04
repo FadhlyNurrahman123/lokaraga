@@ -11,13 +11,18 @@
     body {
       font-family: 'Poppins', sans-serif;
     }
+
     .font-reem {
       font-family: 'Reem Kufi', sans-serif;
     }
+
     .bg-blue {
       background-color: #0F4BA1;
     }
-    input, textarea, select {
+
+    input,
+    textarea,
+    select {
       outline: 1px solid #D1E5F5;
       outline-offset: 0px;
     }
@@ -98,125 +103,135 @@
   </main>
 
   <script>
-  const token = localStorage.getItem("token");
-  let lapanganId = null;
-  let userId = null;
-  let fasilitasData = [];
+    const token = localStorage.getItem("token");
+    let lapanganId = null;
+    let userId = null;
+    let fasilitasData = [];
 
-  const fasilitasInput = document.getElementById("fasilitas-input");
-  const fasilitasList = document.getElementById("fasilitas-list");
-  const fasilitasTambah = document.getElementById("fasilitas-tambah");
+    const fasilitasInput = document.getElementById("fasilitas-input");
+    const fasilitasList = document.getElementById("fasilitas-list");
+    const fasilitasTambah = document.getElementById("fasilitas-tambah");
 
-  fasilitasTambah.addEventListener("click", () => {
-    const text = fasilitasInput.value.trim();
-    if (text !== "") {
-      fasilitasData.push(text);
-      fasilitasInput.value = "";
-      renderFasilitas();
-    }
-  });
+    fasilitasTambah.addEventListener("click", () => {
+      const text = fasilitasInput.value.trim();
+      if (text !== "") {
+        fasilitasData.push(text);
+        fasilitasInput.value = "";
+        renderFasilitas();
+      }
+    });
 
-  function renderFasilitas() {
-    fasilitasList.innerHTML = fasilitasData.map(f => `
+    function renderFasilitas() {
+      fasilitasList.innerHTML = fasilitasData.map(f => `
       <div class="flex items-center gap-2 bg-gray-100 rounded px-2 py-1">
         <span class="text-sm">${f}</span>
         <button type="button" class="text-red-500 text-sm" onclick="hapusFasilitas('${f}')">&times;</button>
       </div>
     `).join("");
-  }
-
-  window.hapusFasilitas = function(f) {
-    fasilitasData = fasilitasData.filter(item => item !== f);
-    renderFasilitas();
-  }
-
-  async function getDataLapangan() {
-    try {
-      const profile = await fetch(`${API_BASE_URL}/profile`, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(res => res.json());
-      userId = profile.id;
-
-      const lapangan = await fetch(`${API_BASE_URL}/lapangan?user_id=${userId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(res => res.json());
-
-      const data = lapangan.data[0];
-      lapanganId = data.id;
-
-      document.getElementById("nama").value = data.nm_lapangan;
-      document.getElementById("alamat").value = data.alamat;
-      document.getElementById("jam-buka").value = data.jam_buka_operasional.slice(0, 5);
-      document.getElementById("jam-tutup").value = data.jam_tutup_operasional.slice(0, 5);
-      document.getElementById("foto-preview").src = `/storage/${data.foto}`;
-
-      fasilitasData = data.fasilitas ? data.fasilitas.split(",").map(f => f.trim()) : [];
-      renderFasilitas();
-
-      await loadJenisOlahraga(data.jenis_olahraga_id);
-    } catch (err) {
-      console.error(err);
-      alert("Gagal memuat data");
     }
-  }
 
-  async function loadJenisOlahraga(selectedId = null) {
-    try {
-      const res = await fetch(`${API_BASE_URL}/jenisolahraga`);
-      const data = await res.json();
-      const select = document.getElementById("olahraga");
+    window.hapusFasilitas = function(f) {
+      fasilitasData = fasilitasData.filter(item => item !== f);
+      renderFasilitas();
+    }
 
-      select.innerHTML = data.data.map(j => `
+    async function getDataLapangan() {
+      try {
+        const profile = await fetch(`${API_BASE_URL}/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(res => res.json());
+        userId = profile.id;
+
+        const lapangan = await fetch(`${API_BASE_URL}/lapangan?user_id=${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(res => res.json());
+
+        const data = lapangan.data?.[0];
+
+        if (!data) {
+          alert("Kamu belum memiliki data lapangan.");
+          document.getElementById("form-edit").style.display = "none";
+          return;
+        }
+
+        lapanganId = data.id;
+        document.getElementById("nama").value = data.nm_lapangan ?? "";
+        document.getElementById("alamat").value = data.alamat ?? "";
+        document.getElementById("jam-buka").value = data.jam_buka_operasional?.slice(0, 5) ?? "";
+        document.getElementById("jam-tutup").value = data.jam_tutup_operasional?.slice(0, 5) ?? "";
+        document.getElementById("foto-preview").src = `/storage/${data.foto}`;
+        fasilitasData = data.fasilitas ? data.fasilitas.split(",").map(f => f.trim()) : [];
+        renderFasilitas();
+        await loadJenisOlahraga(data.jenis_olahraga_id);
+      } catch (err) {
+        console.error(err);
+        alert("Gagal memuat data lapangan.");
+      }
+    }
+
+
+    async function loadJenisOlahraga(selectedId = null) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/jenisolahraga`);
+        const data = await res.json();
+        const select = document.getElementById("olahraga");
+
+        select.innerHTML = data.data.map(j => `
         <option value="${j.id}" ${j.id == selectedId ? "selected" : ""}>${j.nm_jenisolahraga}</option>
       `).join("");
-    } catch (err) {
-      console.error("Gagal memuat jenis olahraga:", err);
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", getDataLapangan);
-
-  document.getElementById("form-edit").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("_method", "PUT");
-    formData.append("user_id", userId);
-    formData.append("nm_lapangan", document.getElementById("nama").value);
-    formData.append("alamat", document.getElementById("alamat").value);
-    formData.append("jam_buka_operasional", document.getElementById("jam-buka").value);
-    formData.append("jam_tutup_operasional", document.getElementById("jam-tutup").value);
-    formData.append("jenis_olahraga_id", document.getElementById("olahraga").value);
-    formData.append("fasilitas", fasilitasData.join(", "));
-    formData.append("harga", "60000");
-
-    const fotoFile = document.getElementById("foto").files[0];
-    if (fotoFile) formData.append("foto", fotoFile);
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/Updatelapangan/${lapanganId}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: formData
-      });
-
-      if (res.ok) {
-        alert("Berhasil update data lapangan!");
-        window.location.href = "/pemilik/kelola";
-      } else {
-        const err = await res.json();
-        console.log("RESPON ERROR:", err);
-        alert("Gagal update: " + (err.message || JSON.stringify(err.errors)));
+      } catch (err) {
+        console.error("Gagal memuat jenis olahraga:", err);
       }
-    } catch (err) {
-      console.error(err);
-      alert("Terjadi kesalahan saat update.");
     }
-  });
+
+    document.addEventListener("DOMContentLoaded", getDataLapangan);
+
+    document.getElementById("form-edit").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append("_method", "PUT");
+      formData.append("user_id", userId);
+      formData.append("nm_lapangan", document.getElementById("nama").value);
+      formData.append("alamat", document.getElementById("alamat").value);
+      formData.append("jam_buka_operasional", document.getElementById("jam-buka").value);
+      formData.append("jam_tutup_operasional", document.getElementById("jam-tutup").value);
+      formData.append("jenis_olahraga_id", document.getElementById("olahraga").value);
+      formData.append("fasilitas", fasilitasData.join(", "));
+      formData.append("harga", "60000");
+
+      const fotoFile = document.getElementById("foto").files[0];
+      if (fotoFile) formData.append("foto", fotoFile);
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/Updatelapangan/${lapanganId}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: formData
+        });
+
+        if (res.ok) {
+          alert("Berhasil update data lapangan!");
+          window.location.href = "/pemilik/kelola";
+        } else {
+          const err = await res.json();
+          console.log("RESPON ERROR:", err);
+          alert("Gagal update: " + (err.message || JSON.stringify(err.errors)));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan saat update.");
+      }
+    });
   </script>
 
 </body>
+
 </html>

@@ -117,86 +117,87 @@
   </main>
 
   <script>
-    function getQueryParams() {
-      const params = new URLSearchParams(window.location.search);
-      return {
-        tanggal: params.get("tanggal"),
-        jam: params.get("jam"),
-      };
-    }
+  function getQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      tanggal: params.get("tanggal"),
+      jam: params.get("jam"),
+    };
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const {
-        tanggal,
-        jam
-      } = getQueryParams();
+  // Fungsi untuk format harga ke Rupiah
+  function formatRupiah(angka) {
+    return "Rp " + Number(angka).toLocaleString("id-ID");
+  }
 
-      // Ambil data dari localStorage
-      const namaLapangan = localStorage.getItem("nama_lapangan") || "Lapangan Tidak Dikenal";
-      const harga = localStorage.getItem("harga") || "Rp -";
-      const lapangan_id = localStorage.getItem("lapangan_id");
-      const jadwal_id = localStorage.getItem("jadwal_id");
-      const token = localStorage.getItem("token");
+  document.addEventListener("DOMContentLoaded", () => {
+    const { tanggal, jam } = getQueryParams();
 
-      // Tampilkan ke UI
-      document.getElementById("lapangan").textContent = namaLapangan;
-      document.getElementById("harga").textContent = harga;
-      document.getElementById("tanggal").textContent = tanggal || "-";
-      document.getElementById("jam").textContent = jam || "-";
-      document.getElementById("total").textContent = harga;
+    // Ambil data dari localStorage
+    const namaLapangan = localStorage.getItem("nama_lapangan") || "Lapangan Tidak Dikenal";
+    const hargaValue = localStorage.getItem("harga") || 0;
+    const lapangan_id = localStorage.getItem("lapangan_id");
+    const jadwal_id = localStorage.getItem("jadwal_id");
+    const token = localStorage.getItem("token");
 
-      const pesanBtn = document.getElementById("pesanBtn");
-      const popup = document.getElementById("popupBerhasil");
+    // Format harga ke rupiah
+    const hargaFormatted = formatRupiah(hargaValue);
 
-      pesanBtn.addEventListener("click", async () => {
-        if (!lapangan_id || !jadwal_id || !tanggal || !token) {
-          console.log({ lapangan_id, jadwal_id, tanggal, token });
-          alert("Data pemesanan tidak lengkap.");
-          return;
+    // Tampilkan ke UI
+    document.getElementById("lapangan").textContent = namaLapangan;
+    document.getElementById("harga").textContent = `${hargaFormatted} / jam`;
+    document.getElementById("tanggal").textContent = tanggal || "-";
+    document.getElementById("jam").textContent = jam || "-";
+    document.getElementById("total").textContent = hargaFormatted;
+
+    const pesanBtn = document.getElementById("pesanBtn");
+    const popup = document.getElementById("popupBerhasil");
+
+    pesanBtn.addEventListener("click", async () => {
+      if (!lapangan_id || !jadwal_id || !tanggal || !token) {
+        console.log({ lapangan_id, jadwal_id, tanggal, token });
+        alert("Data pemesanan tidak lengkap.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/Createpesanan`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            lapangan_id: parseInt(lapangan_id),
+            jadwal_id: parseInt(jadwal_id),
+            tanggal: tanggal,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          popup.classList.remove("hidden");
+          setTimeout(() => {
+            popup.classList.add("hidden");
+
+            localStorage.removeItem("lapangan_id");
+            localStorage.removeItem("jadwal_id");
+            localStorage.removeItem("nama_lapangan");
+            localStorage.removeItem("harga");
+
+            window.location.href = "/penyewa/riwayat";
+          }, 2000);
+        } else {
+          alert("Gagal memesan: " + (result.message || "Terjadi kesalahan."));
         }
-
-        try {
-          const response = await fetch(`${API_BASE_URL}/Createpesanan`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              lapangan_id: parseInt(lapangan_id),
-              jadwal_id: parseInt(jadwal_id),
-              tanggal: tanggal,
-            }),
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-            // tampilkan popup dan redirect
-            popup.classList.remove("hidden");
-            setTimeout(() => {
-              popup.classList.add("hidden");
-
-              // optional: bersihkan localStorage
-              localStorage.removeItem("lapangan_id");
-              localStorage.removeItem("jadwal_id");
-              localStorage.removeItem("nama_lapangan");
-              localStorage.removeItem("harga");
-
-              window.location.href = "/penyewa/riwayat";
-            }, 2000);
-          } else {
-            alert("Gagal memesan: " + (result.message || "Terjadi kesalahan."));
-          }
-        } catch (error) {
-          console.error("Error:", error);
-          alert("Terjadi kesalahan saat memesan.");
-        }
-      });
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Terjadi kesalahan saat memesan.");
+      }
     });
-  </script>
-
-
+  });
+</script>
 </body>
 
 </html>

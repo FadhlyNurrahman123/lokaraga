@@ -90,16 +90,17 @@
 
                     data.forEach(item => {
                         const card = document.createElement("a");
-                        card.href = `/konfirm-membership?id=${item.id}`;
+                        const lapangan_id = localStorage.getItem("lapangan_id");
+                        card.href = `/penyewa/konfirm-membership?id=${item.id}&lapangan_id=${lapangan_id}`;
                         card.innerHTML = `
-                        <div class="flex justify-between items-center bg-[#F4FAFF] border border-[#C4DAEE] px-6 py-4 rounded-xl shadow-sm hover:shadow-md transition">
-                            <div>
-                                <p class="font-semibold">${item.nm_membership}</p>
-                                <p class="text-sm text-gray-700 mt-2">${item.masa_berlaku}</p>
-                            </div>
-                            <p class="font-semibold">${item.harga}</p>
+                    <div class="flex justify-between items-center bg-[#F4FAFF] border border-[#C4DAEE] px-6 py-4 rounded-xl shadow-sm hover:shadow-md transition">
+                        <div>
+                            <p class="font-semibold">${item.nm_membership}</p>
+                            <p class="text-sm text-gray-700 mt-2">${item.masa_berlaku}</p>
                         </div>
-                    `;
+                        <p class="font-semibold">Rp ${Number(item.harga).toLocaleString("id-ID")}</p>
+                    </div>
+                `;
                         list.appendChild(card);
                     });
                 })
@@ -110,4 +111,5 @@
         });
     </script>
 </body>
+
 </html>

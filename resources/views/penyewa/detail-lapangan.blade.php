@@ -166,6 +166,10 @@
 
         function renderDetail(data) {
             const container = document.getElementById("detail-container");
+            localStorage.setItem("lapangan_id", getIdFromURL());
+            const hargaFormat = (angka) => {
+                return "Rp " + Number(angka).toLocaleString("id-ID");
+            };
             container.innerHTML = `
       <div class="relative w-full flex justify-center mt-4">
         <div class="relative w-full max-w-3xl overflow-hidden rounded-xl h-80">
@@ -183,7 +187,7 @@
         <div class="w-full lg:w-72 space-y-6">
           <div class="bg-white shadow-md p-4 rounded-xl">
             <h4 class="text-md text-gray-600">Harga</h4>
-            <p class="text-2xl font-bold mt-2">${data.harga}</p>
+            <p id="harga-lapangan" data-harga="${data.harga}" class="text-2xl font-bold mt-2">${hargaFormat(data.harga)}</p>
           </div>
           <div class="bg-white shadow-md p-4 rounded-xl space-y-3">
             <h4 class="text-md text-gray-800">Pilih Jadwal</h4>
@@ -206,7 +210,7 @@
 
         <div class="flex-1 space-y-5">
           <div class="bg-white shadow-md p-4 rounded-xl flex justify-between items-center">
-            <h3 class="text-2xl font-semibold">${data.nm_lapangan}</h3>
+            <h3 id="nama-lapangan" class="text-2xl font-semibold">${data.nm_lapangan}</h3>
             <a href="/penyewa/membership" class="bg-[#0F4BA1] text-white font-medium px-4 py-2 rounded-full text-sm inline-block">
             Gabung Membership
             </a>
@@ -231,7 +235,6 @@
 
                 if (!tanggal || !jam) return;
 
-                // cari jadwal_id berdasarkan jam
                 const jadwalCocok = jadwalData.find(j => {
                     const jamFormat = `${formatTime(j.jam_mulai)} - ${formatTime(j.jam_selesai)}`;
                     return jamFormat === jam;
@@ -242,6 +245,11 @@
                     return;
                 }
 
+                const nama = document.getElementById("nama-lapangan")?.textContent || "-";
+                const harga = document.getElementById("harga-lapangan")?.dataset.harga || "0";
+
+                localStorage.setItem("nama_lapangan", nama);
+                localStorage.setItem("harga", harga);
                 localStorage.setItem("tanggal", tanggal);
                 localStorage.setItem("jam", jam);
                 localStorage.setItem("jadwal_id", jadwalCocok.id);

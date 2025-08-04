@@ -79,6 +79,7 @@
   </main>
   <script>
     const token = localStorage.getItem("token");
+    const userName = localStorage.getItem("user_name");
 
     function isSedangBerlangsung(dateStr) {
       const today = new Date();
@@ -89,6 +90,9 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+      const sedangDiv = document.getElementById("pesanan-berlangsung");
+      const selesaiDiv = document.getElementById("pesanan-selesai");
+
       try {
         const res = await fetch(`${API_BASE_URL}/pesanan`, {
           headers: {
@@ -97,19 +101,23 @@
         });
 
         if (!res.ok) throw new Error("Gagal memuat data pesanan");
+
         const result = await res.json();
-        const pesanan = result.data;
+        console.log("DATA PESANAN:", result.data);
 
-        const sedangDiv = document.getElementById("pesanan-berlangsung");
-        const selesaiDiv = document.getElementById("pesanan-selesai");
+        // Filter hanya pesanan milik user yang login
+        const pesananUser = result.data.filter(item => item.user_id === userName);
 
-        pesanan.forEach((item) => {
+        let hasSedang = false;
+        let hasSelesai = false;
+
+        pesananUser.forEach(item => {
           const card = document.createElement("div");
           card.className = "bg-white rounded-2xl shadow-md p-4 w-full max-w-2xl mb-4";
           card.innerHTML = `
           <div class="flex justify-between items-center mb-4">
             <p class="font-semibold text-md">ID transaksi: INV-${item.id}-FT</p>
-            <span class="text-[#1BE387] font-bold text-md">${item.total_harga}</span>
+            <span class="text-[#1BE387] font-bold text-md">${formatRupiah(item.total_harga)}</span>
           </div>
           <div class="flex justify-between items-start">
             <div class="space-y-1">
@@ -122,12 +130,35 @@
 
           if (isSedangBerlangsung(item.tanggal)) {
             sedangDiv.appendChild(card);
+            hasSedang = true;
           } else {
             selesaiDiv.appendChild(card);
+            hasSelesai = true;
           }
         });
+
+        if (!hasSedang) {
+          sedangDiv.innerHTML = `
+          <div class="bg-white rounded-2xl p-20 flex items-center justify-center shadow-md w-full">
+            <p class="italic text-center text-gray-600">Tidak ada pesanan berlangsung</p>
+          </div>`;
+        }
+
+        if (!hasSelesai) {
+          selesaiDiv.innerHTML = `
+          <div class="bg-white rounded-2xl p-20 flex items-center justify-center shadow-md w-full">
+            <p class="italic text-center text-gray-600">Tidak ada riwayat pesanan selesai</p>
+          </div>`;
+        }
+
       } catch (err) {
-        console.error(err);
+        console.error("Gagal fetch data pesanan:", err);
+      }
+
+      function formatRupiah(angka) {
+        if (!angka) return "-";
+        const num = typeof angka === "string" ? angka.replace(/[^\d]/g, "") : angka;
+        return `Rp ${parseInt(num).toLocaleString("id-ID")}`;
       }
     });
   </script>
