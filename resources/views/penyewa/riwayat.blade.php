@@ -76,6 +76,10 @@
         <div id="pesanan-selesai"></div>
       </div>
     </div>
+    <div>
+      <h3 class="font-semibold mb-3 mt-3">Membership</h3>
+      <div id="riwayat-membership" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    </div>
   </main>
   <script>
     const token = localStorage.getItem("token");
@@ -89,24 +93,28 @@
       return date >= today;
     }
 
+    function formatRupiah(angka) {
+      if (!angka) return "-";
+      const num = typeof angka === "string" ? angka.replace(/[^\d]/g, "") : angka;
+      return `${parseInt(num).toLocaleString("id-ID")}`;
+    }
+
     document.addEventListener("DOMContentLoaded", async () => {
       const sedangDiv = document.getElementById("pesanan-berlangsung");
       const selesaiDiv = document.getElementById("pesanan-selesai");
+      const membershipDiv = document.getElementById("riwayat-membership");
 
       try {
-        const res = await fetch(`${API_BASE_URL}/pesanan`, {
+        // === 1. Fetch Pesanan ===
+        const resPesanan = await fetch(`${API_BASE_URL}/pesanan`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
           },
         });
+        if (!resPesanan.ok) throw new Error("Gagal memuat data pesanan");
+        const resultPesanan = await resPesanan.json();
 
-        if (!res.ok) throw new Error("Gagal memuat data pesanan");
-
-        const result = await res.json();
-        console.log("DATA PESANAN:", result.data);
-
-        // Filter hanya pesanan milik user yang login
-        const pesananUser = result.data.filter(item => item.user_id === userName);
+        const pesananUser = resultPesanan.data.filter(item => item.user_id === userName);
 
         let hasSedang = false;
         let hasSelesai = false;
@@ -143,7 +151,6 @@
             <p class="italic text-center text-gray-600">Tidak ada pesanan berlangsung</p>
           </div>`;
         }
-
         if (!hasSelesai) {
           selesaiDiv.innerHTML = `
           <div class="bg-white rounded-2xl p-20 flex items-center justify-center shadow-md w-full">
@@ -151,14 +158,56 @@
           </div>`;
         }
 
-      } catch (err) {
-        console.error("Gagal fetch data pesanan:", err);
-      }
+        // Fetch membership
+        const resMember = await fetch(`${API_BASE_URL}/member`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        const resultMember = await resMember.json();
 
-      function formatRupiah(angka) {
-        if (!angka) return "-";
-        const num = typeof angka === "string" ? angka.replace(/[^\d]/g, "") : angka;
-        return `Rp ${parseInt(num).toLocaleString("id-ID")}`;
+        // Fetch jenis membership
+        const resJenis = await fetch(`${API_BASE_URL}/jenismember`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        const resultJenis = await resJenis.json();
+
+        const memberUser = resultMember.data.filter(m => m.user_id == userName);
+
+        if (memberUser.length > 0) {
+          memberUser.forEach(m => {
+            // Cari harga berdasarkan nama membership
+            const jenis = resultJenis.data.find(j => j.nm_membership === m.jenismember_id) || {};
+
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-2xl shadow-md p-4 w-full max-w-2xl mb-4";
+
+            card.innerHTML = `
+      <div class="flex justify-between items-center mb-2">
+        <p class="font-semibold text-md">ID transaksi: INV-${m.id}-MB</p>
+        <span class="text-[#1BE387] font-bold text-md">${formatRupiah(jenis.harga)}</span>
+      </div>
+      <div class="flex justify-between items-start">
+        <div class="space-y-1">
+          <p class="text-sm text-gray-900 font-semibold">${m.lapangan_id}</p>
+          <p class="text-sm text-gray-700">${m.jenismember_id}</p>
+        </div>
+        <a href="/penyewa/detail-membership/${m.id}" class="bg-[#FFE500] text-black px-4 py-1 text-sm rounded-full font-medium h-fit">Detail</a>
+      </div>
+    `;
+            membershipDiv.appendChild(card);
+          });
+        } else {
+          membershipDiv.innerHTML = `
+    <div class="bg-white rounded-2xl p-20 flex items-center justify-center shadow-md w-full">
+      <p class="italic text-center text-gray-600">Tidak ada membership</p>
+    </div>`;
+        }
+
+      } catch (error) {
+        console.error(error);
       }
     });
   </script>

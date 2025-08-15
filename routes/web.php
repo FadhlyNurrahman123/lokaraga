@@ -16,6 +16,7 @@ Route::prefix('penyewa')->group(function () {
     Route::view('/konfirm-pesan-lapangan', 'penyewa.konfirm-pesan-lapangan');
     Route::view('/riwayat', 'penyewa.riwayat');
     Route::get('/detail-riwayat/{id}', fn($id) => view('penyewa.detail-riwayat', ['id' => $id]));
+    Route::get('/detail-membership/{id}', fn($id) => view('penyewa.detail-membership', ['id' => $id]));
     Route::view('/membership', 'penyewa.membership');
     Route::view('/pilihan-membership', 'penyewa.pilihan-membership');
     Route::view('/konfirm-membership', 'penyewa.konfirm-membership');
